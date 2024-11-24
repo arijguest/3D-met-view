@@ -17,11 +17,11 @@ class App {
         this.loadInitialData();
     }
 
-    initializeCesium() {
+    async initializeCesium() {
         const token = window.CESIUM_TOKEN || CONFIG.CESIUM_TOKEN;
         Cesium.Ion.defaultAccessToken = token;
         this.viewer = new Cesium.Viewer('cesiumContainer', {
-            terrainProvider: Cesium.createWorldTerrain(),
+            terrainProvider: await Cesium.createWorldTerrainAsync(),
             baseLayerPicker: true,
             navigationHelpButton: true,
             sceneModePicker: true,
@@ -34,9 +34,6 @@ class App {
             selectionIndicator: false,
             navigationInstructionsInitiallyVisible: false
         });
-
-        this.viewer.scene.globe.enableLighting = true;
-        this.viewer.scene.globe.depthTestAgainstTerrain = true;
     }
 
     initializeManagers() {
