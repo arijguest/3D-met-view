@@ -18,27 +18,24 @@ export class UIManager {
 
     initializeFilters(meteorites, craters) {
         // Set ranges based on actual data
-        const maxDiameter = Math.max(...craters
+        const craterDiameters = craters
             .map(c => parseFloat(c.properties['Crater diamter [km]']))
-            .filter(d => !isNaN(d)));
-        
-        const maxAge = Math.max(...craters
+            .filter(d => !isNaN(d));
+        const craterAges = craters
             .map(c => parseFloat(c.properties['Age [Myr]']))
-            .filter(a => !isNaN(a)));
-
-        // Initialize all dropdowns
-        this.populateDropdowns(meteorites, craters);
-
+            .filter(a => !isNaN(a));
+    
+        const maxDiameter = Math.max(...craterDiameters);
+        const maxAge = Math.max(...craterAges);
+    
         // Set slider values
-        document.getElementById('yearRangeMin').value = FILTER_RANGES.YEAR.MIN;
-        document.getElementById('yearRangeMax').value = FILTER_RANGES.YEAR.MAX;
-        document.getElementById('massRangeMin').value = FILTER_RANGES.MASS.MIN;
-        document.getElementById('massRangeMax').value = FILTER_RANGES.MASS.MAX;
         document.getElementById('diameterRangeMin').value = 0;
         document.getElementById('diameterRangeMax').value = maxDiameter;
         document.getElementById('ageRangeMin').value = 0;
         document.getElementById('ageRangeMax').value = maxAge;
-
+    
+        // Populate dropdowns
+        this.populateDropdowns(meteorites, craters);
         this.updateFilterDisplays();
     }
 
@@ -203,22 +200,22 @@ export class UIManager {
 
     populateDropdowns(meteorites, craters) {
         // Meteorite classes
-        const classes = [...new Set(meteorites
+        const meteoriteClasses = [...new Set(meteorites
             .map(m => m.recclass)
-            .filter(c => c))];
-        this.populateSelect('meteoriteClassSelect', classes);
-
+            .filter(Boolean))];
+        this.populateSelect('meteoriteClassSelect', meteoriteClasses);
+    
         // Target rocks
-        const rocks = [...new Set(craters
+        const targetRocks = [...new Set(craters
             .map(c => c.properties.Target)
-            .filter(r => r))];
-        this.populateSelect('targetRockSelect', rocks);
-
+            .filter(Boolean))];
+        this.populateSelect('targetRockSelect', targetRocks);
+    
         // Crater types
-        const types = [...new Set(craters
+        const craterTypes = [...new Set(craters
             .map(c => c.properties['Crater type'])
-            .filter(t => t))];
-        this.populateSelect('craterTypeSelect', types);
+            .filter(Boolean))];
+        this.populateSelect('craterTypeSelect', craterTypes);
     }
 
     populateSelect(id, options) {
@@ -315,6 +312,21 @@ export class UIManager {
                 this.debounce(() => this.handleSearch(e.target.value), 300);
             });
         }
+    }
+
+    setupTooltipHandler(viewer) {
+        const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+        handler.setInputAction((movement) => {
+            const pickedObject = viewer.scene.pick(movement.endPosition);
+            if (Cesium.defined(pickedObject)) {
+                const entity = pickedObject.id;
+                if (entity) {
+                    this.updateTooltip(entity, movement.endPosition);
+                }
+            } else {
+                this.hideTooltip();
+            }
+        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
     }
 
     updateTooltip(entity, position) {
