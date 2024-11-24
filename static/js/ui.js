@@ -19,14 +19,13 @@ export class UIManager {
         const meteoriteSelect = document.getElementById('meteoriteColorScheme');
         const craterSelect = document.getElementById('craterColorScheme');
         
-        Object.keys(this.colorSchemes).forEach(scheme => {
+        Object.keys(COLOR_SCHEMES).forEach(scheme => {
             meteoriteSelect.add(new Option(scheme, scheme));
             craterSelect.add(new Option(scheme, scheme));
         });
-
-        // Set default selections
-        meteoriteSelect.value = 'Default';
-        craterSelect.value = 'Blue Scale';
+    
+        meteoriteSelect.value = 'DEFAULT';
+        craterSelect.value = 'BLUE_SCALE';
     }
 
     updateLegends() {
@@ -37,7 +36,7 @@ export class UIManager {
     updateMeteoriteLegend() {
         const legendContainer = document.getElementById('meteoriteLegend');
         const selectedScheme = document.getElementById('meteoriteColorScheme').value;
-        const scheme = COLOR_SCHEMES[selectedScheme].meteorites;  // Changed from .colors to .meteorites
+        const scheme = COLOR_SCHEMES[selectedScheme].meteorites;
     
         legendContainer.innerHTML = `
             <h3>🌠 Meteorites</h3>
@@ -50,7 +49,7 @@ export class UIManager {
     updateCraterLegend() {
         const legendContainer = document.getElementById('craterLegend');
         const selectedScheme = document.getElementById('craterColorScheme').value;
-        const scheme = COLOR_SCHEMES[selectedScheme].craters;  // Using .craters directly
+        const scheme = COLOR_SCHEMES[selectedScheme].craters;
     
         legendContainer.innerHTML = `
             <h3>💥 Impact Craters</h3>
