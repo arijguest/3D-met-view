@@ -238,6 +238,40 @@ class App {
         this.ui.updateCraterBar(this.craters.getTopCraters(10));
     }
 
+    focusOnMeteorite(id) {
+        const meteorite = this.meteorites.filteredMeteorites.find(m => m.id === id);
+        if (!meteorite) return;
+    
+        const coords = this.meteorites.getCoordinates(meteorite);
+        if (!coords) return;
+    
+        this.viewer.camera.flyTo({
+            destination: Cesium.Cartesian3.fromDegrees(
+                coords.longitude,
+                coords.latitude,
+                CONFIG.DEFAULT_ZOOM
+            ),
+            duration: 2
+        });
+    }
+    
+    focusOnCrater(name) {
+        const crater = this.craters.filteredCraters.find(c => c.properties.Name === name);
+        if (!crater) return;
+    
+        const coords = this.craters.getCoordinates(crater);
+        if (!coords) return;
+    
+        this.viewer.camera.flyTo({
+            destination: Cesium.Cartesian3.fromDegrees(
+                coords.longitude,
+                coords.latitude,
+                CONFIG.DEFAULT_ZOOM
+            ),
+            duration: 2
+        });
+    }
+
     validateAndNormalizeRanges(filterState) {
         for (const range of ['year', 'mass', 'diameter', 'age']) {
             if (filterState[range].min > filterState[range].max) {
