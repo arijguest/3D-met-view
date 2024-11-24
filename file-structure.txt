@@ -1,0 +1,20 @@
+3D-met-view/
+├── src/
+│   ├── __init__.py
+│   ├── meteorites.py
+│   ├── craters.py
+│   ├── utils.py
+│   └── handlers.py
+├── static/
+│   ├── css/
+│   │   └── styles.css
+│   └── js/
+│       ├── main.js
+│       ├── meteorites.js
+│       ├── craters.js
+│       ├── ui.js
+│       └── constants.js
+├── templates/
+│   └── index.html
+├── requirements.txt
+└── app.py
