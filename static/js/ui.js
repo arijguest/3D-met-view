@@ -291,18 +291,30 @@ export class UIManager {
 
 
     updateDataBars(meteorites, craters) {
-        this.updateMeteoriteBar(meteorites);
-        this.updateCraterBar(craters);
-    }
-
-    updateMeteoriteBar(meteorites) {
-        const content = this.generateBarContent(meteorites, 'meteorite');
-        this.elements.meteoriteBar.innerHTML = content;
-    }
-
-    updateCraterBar(craters) {
-        const content = this.generateBarContent(craters, 'crater');
-        this.elements.craterBar.innerHTML = content;
+        const meteoriteBar = document.getElementById('meteoriteBar');
+        const craterBar = document.getElementById('craterBar');
+        
+        // Update meteorite bar
+        const topMeteorites = meteorites
+            .sort((a, b) => parseFloat(b.mass) - parseFloat(a.mass))
+            .slice(0, 10);
+        
+        meteoriteBar.innerHTML = `
+            <div class="bar-item"><strong>Top Meteorites:</strong></div>
+            <div class="bar-item" onclick="openModal()"><strong>View All</strong></div>
+            ${this.generateMeteoriteBarItems(topMeteorites)}
+        `;
+        
+        // Update crater bar
+        const topCraters = craters
+            .sort((a, b) => parseFloat(b.properties['Crater diamter [km]']) - parseFloat(a.properties['Crater diamter [km]']))
+            .slice(0, 10);
+        
+        craterBar.innerHTML = `
+            <div class="bar-item"><strong>Top Impact Craters:</strong></div>
+            <div class="bar-item" onclick="openCraterModal()"><strong>View All</strong></div>
+            ${this.generateCraterBarItems(topCraters)}
+        `;
     }
 
     updateFilterCounts(meteoriteCount, craterCount) {
