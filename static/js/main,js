@@ -12,7 +12,8 @@ class App {
     }
 
     initializeCesium() {
-        Cesium.Ion.defaultAccessToken = CONFIG.CESIUM_TOKEN;
+        const token = window.CESIUM_TOKEN || CONFIG.CESIUM_TOKEN;
+        Cesium.Ion.defaultAccessToken = token;
         this.viewer = new Cesium.Viewer('cesiumContainer', {
             terrainProvider: Cesium.createWorldTerrain(),
             baseLayerPicker: true,
