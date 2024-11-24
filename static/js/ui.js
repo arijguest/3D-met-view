@@ -17,27 +17,32 @@ export class UIManager {
     }
 
     initializeFilters(meteorites, craters) {
-        // Set ranges based on actual data
+        // Get actual max values from data
         const craterDiameters = craters
             .map(c => parseFloat(c.properties['Crater diamter [km]']))
             .filter(d => !isNaN(d));
         const craterAges = craters
-            .map(c => parseFloat(c.properties['Age [Myr]']))
+            .map(c => c.properties.age_max)
             .filter(a => !isNaN(a));
     
-        const maxDiameter = Math.max(...craterDiameters);
-        const maxAge = Math.max(...craterAges);
+        const maxDiameter = Math.max(...craterDiameters, 300);  // Use at least 300km
+        const maxAge = Math.max(...craterAges, 3000);  // Use at least 3000 Myr
     
-        // Set slider values
-        document.getElementById('diameterRangeMin').value = 0;
-        document.getElementById('diameterRangeMax').value = maxDiameter;
-        document.getElementById('ageRangeMin').value = 0;
-        document.getElementById('ageRangeMax').value = maxAge;
+        // Set slider ranges
+        const diameterMin = document.getElementById('diameterRangeMin');
+        const diameterMax = document.getElementById('diameterRangeMax');
+        const ageMin = document.getElementById('ageRangeMin');
+        const ageMax = document.getElementById('ageRangeMax');
     
-        // Populate dropdowns
-        this.populateDropdowns(meteorites, craters);
+        diameterMin.value = 0;
+        diameterMax.value = maxDiameter;
+        ageMin.value = 0;
+        ageMax.value = maxAge;
+    
+        // Update display
         this.updateFilterDisplays();
     }
+
 
     initializeInfoMenu() {
         const infoModal = document.getElementById('infoModal');
