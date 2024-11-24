@@ -5,12 +5,6 @@ import { CONFIG, COLOR_SCHEMES, FILTER_RANGES } from './constants.js';
 
 class App {
     constructor() {
-        console.group('App Initialization');
-        console.log('Starting initialization');
-        console.log('Initial craters:', window.INITIAL_CRATERS?.features?.length);
-        console.log('Cesium token status:', !!window.CESIUM_TOKEN);
-        console.groupEnd();
-
         this.init();
     }
 
@@ -19,6 +13,27 @@ class App {
         this.initializeManagers();
         this.setupEventHandlers();
         this.loadInitialData();
+        this.setupColorSchemeHandlers();
+    }
+
+    setupColorSchemeHandlers() {
+        document.getElementById('meteoriteColorScheme').addEventListener('change', () => {
+            this.meteorites.updateEntities();
+            this.ui.updateMeteoriteLegend();
+        });
+
+        document.getElementById('craterColorScheme').addEventListener('change', () => {
+            this.craters.updateEntities();
+            this.ui.updateCraterLegend();
+        });
+
+        document.getElementById('resetColorSchemes').addEventListener('click', () => {
+            document.getElementById('meteoriteColorScheme').value = 'Default';
+            document.getElementById('craterColorScheme').value = 'Blue Scale';
+            this.meteorites.updateEntities();
+            this.craters.updateEntities();
+            this.ui.updateLegends();
+        });
     }
 
     async initializeCesium() {
