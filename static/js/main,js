@@ -5,10 +5,12 @@ import { CONFIG, COLOR_SCHEMES, FILTER_RANGES } from './constants.js';
 
 class App {
     constructor() {
+        console.log('Starting App initialization');
         this.initializeCesium();
         this.initializeManagers();
         this.setupEventHandlers();
         this.loadInitialData();
+        console.log('App initialization complete');
     }
 
     initializeCesium() {
@@ -155,18 +157,11 @@ class App {
     }
 }
 
-// Initialize app when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    window.app = new App();
-});
-
-// Export for global access if needed
-export default App;
-
 document.addEventListener('DOMContentLoaded', () => {
     console.group('Application Initialization');
     console.log('DOM Content Loaded');
-    console.log('Initializing App...');
+    console.log('Initial Craters:', window.INITIAL_CRATERS?.features?.length || 0);
+    console.log('Cesium Token Status:', !!window.CESIUM_TOKEN);
     
     try {
         window.app = new App();
@@ -177,3 +172,5 @@ document.addEventListener('DOMContentLoaded', () => {
     
     console.groupEnd();
 });
+
+export default App;
