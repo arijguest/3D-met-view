@@ -43,8 +43,6 @@ class App {
         this.viewer.scene.globe.enableLighting = true;
         this.viewer.scene.globe.depthTestAgainstTerrain = true;
     }
-}
-
 
     initializeManagers() {
         this.ui = new UIManager();
