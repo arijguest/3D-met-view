@@ -13,13 +13,14 @@ html, body, #wrapper, #cesiumContainer {
 #header {
     position: absolute;
     top: 20vmin;
-    left: 30%;
+    margin-left: auto;
+    margin-right: auto;
     background: rgba(0, 0, 0, 0.7);
     padding: 5vmin;
     z-index: 2;
     color: white;
     text-align: center;
-    border-radius: 2vmin;
+    border-radius: 5vmin;
 }
 
 #header h1 {
