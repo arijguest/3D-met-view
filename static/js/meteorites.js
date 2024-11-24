@@ -5,7 +5,6 @@ import { CONFIG, COLOR_SCHEMES, FILTER_RANGES } from './constants.js';
 
 export class MeteoriteManager {
     constructor(viewer) {
-        console.log('Initializing MeteoriteManager');
         this.viewer = viewer;
         this.dataSource = new Cesium.CustomDataSource('meteorites');
         this.allMeteorites = [];
