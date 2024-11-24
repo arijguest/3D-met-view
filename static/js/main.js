@@ -144,12 +144,30 @@ class App {
     }
 
     setupEventHandlers() {
-        this.viewer.camera.changed.addEventListener(() => {
-            this.handleCameraChange();
+        // Modal handlers
+        window.openModal = () => {
+            document.getElementById('modal').style.display = 'block';
+            this.updateModalTable();
+        };
+    
+        window.openCraterModal = () => {
+            document.getElementById('craterModal').style.display = 'block';
+            this.updateCraterModalTable();
+        };
+    
+        // Close button handlers
+        document.querySelectorAll('.close-button').forEach(button => {
+            button.onclick = () => {
+                button.closest('.modal, #controls, #keyMenu, #infoModal').style.display = 'none';
+            };
         });
-
-        this.screenSpaceHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
-        this.setupEntityInteraction();
+    
+        // Click outside to close
+        window.onclick = (event) => {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        };
     }
 
     setupEntityInteraction() {
