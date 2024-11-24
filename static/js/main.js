@@ -300,6 +300,42 @@ class App {
         }
     }
 
+    updateModalTable() {
+        const tbody = document.querySelector('#fullMeteoriteTable tbody');
+        const searchQuery = document.getElementById('meteoriteSearchInput').value.toLowerCase();
+        
+        tbody.innerHTML = this.meteorites.filteredMeteorites
+            .filter(m => m.name.toLowerCase().includes(searchQuery))
+            .map((meteorite, index) => `
+                <tr data-index="${index}" onclick="window.app.focusOnMeteorite('${meteorite.id}')">
+                    <td>${meteorite.name}</td>
+                    <td>${this.formatMass(meteorite.mass)}</td>
+                    <td>${meteorite.recclass || 'Unknown'}</td>
+                    <td>${meteorite.year ? new Date(meteorite.year).getFullYear() : 'Unknown'}</td>
+                    <td>${meteorite.fall || 'Unknown'}</td>
+                    <td>${meteorite.id ? `<a href="https://www.lpi.usra.edu/meteor/metbull.php?code=${meteorite.id}" target="_blank">View</a>` : 'N/A'}</td>
+                </tr>
+            `).join('');
+    }
+    
+    updateCraterModalTable() {
+        const tbody = document.querySelector('#fullCraterTable tbody');
+        const searchQuery = document.getElementById('craterSearchInput').value.toLowerCase();
+        
+        tbody.innerHTML = this.craters.filteredCraters
+            .filter(c => c.properties.Name.toLowerCase().includes(searchQuery))
+            .map((crater, index) => `
+                <tr data-index="${index}" onclick="window.app.focusOnCrater('${crater.properties.Name}')">
+                    <td><a href="https://impact-craters.com/craters_id${crater.properties.No}" target="_blank">${crater.properties.Name}</a></td>
+                    <td>${crater.properties.Country || 'Unknown'}</td>
+                    <td>${crater.properties['Age [Myr]'] || 'Unknown'}</td>
+                    <td>${crater.properties['Crater diamter [km]'] || 'Unknown'}</td>
+                    <td>${crater.properties['Crater type'] || 'Unknown'}</td>
+                    <td>${crater.properties.Target || 'Unknown'}</td>
+                </tr>
+            `).join('');
+    }
+
     resetFilters() {
         this.filterState = {
             year: { min: FILTER_RANGES.YEAR.MIN, max: FILTER_RANGES.YEAR.MAX },
