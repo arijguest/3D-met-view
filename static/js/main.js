@@ -49,6 +49,17 @@ class App {
         this.initializeInfoMenu();
     }
 
+    formatMass(mass) {
+        if (mass === 'Unknown' || isNaN(mass)) return 'Unknown';
+        if (mass >= 1000000) {
+            return `${(mass / 1000000).toFixed(2)} tonnes`;
+        } else if (mass >= 1000) {
+            return `${(mass / 1000).toFixed(2)} kg`;
+        }
+        return `${mass} g`;
+    }
+
+
     initializeFilters() {
         // Initialize year range
         const yearMin = document.getElementById('yearRangeMin');
