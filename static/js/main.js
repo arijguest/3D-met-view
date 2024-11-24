@@ -34,27 +34,27 @@ class App {
             this.craters.updateEntities();
             this.ui.updateLegends();
         });
+        
     setupFilterHandlers() {
-        document.getElementById('applyFiltersButton').addEventListener('click', () => {
-            this.applyFilters();
-        });
+        document.getElementById('applyFiltersButton').addEventListener('click', () => 
+            this.applyFilters()
+        );
 
-        document.getElementById('refreshButton').addEventListener('click', () => {
-            this.resetFilters();
-        });
+        document.getElementById('refreshButton').addEventListener('click', () => 
+            this.resetFilters()
+        );
 
-        // Toggle visibility handlers
-        document.getElementById('toggleMeteorites').addEventListener('change', (e) => {
-            this.meteorites.setVisibility(e.target.checked);
-        });
+        document.getElementById('toggleMeteorites').addEventListener('change', (e) => 
+            this.meteorites.setVisibility(e.target.checked)
+        );
 
-        document.getElementById('toggleCraters').addEventListener('change', (e) => {
-            this.craters.setVisibility(e.target.checked);
-        });
+        document.getElementById('toggleCraters').addEventListener('change', (e) => 
+            this.craters.setVisibility(e.target.checked)
+        );
 
-        document.getElementById('clusterMeteorites').addEventListener('change', (e) => {
-            this.meteorites.setClusteringEnabled(e.target.checked);
-        });
+        document.getElementById('clusterMeteorites').addEventListener('change', (e) => 
+            this.meteorites.setClusteringEnabled(e.target.checked)
+        );
     }
 
     async initializeCesium() {
