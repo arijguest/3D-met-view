@@ -93,6 +93,30 @@ class App {
             .join('');
     }
 
+    setupModalHandlers() {
+        // View All buttons
+        document.querySelectorAll('.view-all').forEach(button => {
+            button.onclick = () => {
+                if (button.dataset.type === 'meteorite') {
+                    this.openModal();
+                } else {
+                    this.openCraterModal();
+                }
+            };
+        });
+    
+        // Modal close buttons
+        document.querySelectorAll('.modal .close-button').forEach(button => {
+            button.onclick = () => button.closest('.modal').style.display = 'none';
+        });
+    
+        // Info modal
+        document.getElementById('infoButton').onclick = () => {
+            this.ui.closeOtherMenus('info');
+            document.getElementById('infoModal').style.display = 'block';
+        };
+    }
+    
     setupFullscreenHandler() {
         document.getElementById('fullscreenButton').addEventListener('click', () => {
             if (!document.fullscreenElement) {
@@ -269,8 +293,38 @@ class App {
     }
 
     updateDataBars() {
-        this.ui.updateMeteoriteBar(this.meteorites.getTopMeteorites(10));
-        this.ui.updateCraterBar(this.craters.getTopCraters(10));
+        // Top meteorites bar
+        const topMeteorites = this.meteorites.allMeteorites
+            .filter(m => m.mass)
+            .sort((a, b) => parseFloat(b.mass) - parseFloat(a.mass))
+            .slice(0, 10);
+    
+        const meteoriteBar = document.getElementById('meteoriteBar');
+        meteoriteBar.innerHTML = `
+            <div class="bar-item"><strong>Top Meteorites:</strong></div>
+            <div class="bar-item view-all" data-type="meteorite"><strong>View All</strong></div>
+            ${topMeteorites.map(m => `
+                <div class="bar-item" onclick="window.app.flyToMeteorite('${m.id}')">
+                    🌠 ${m.name} - ${this.formatMass(parseFloat(m.mass))}
+                </div>
+            `).join('')}
+        `;
+    
+        // Top craters bar
+        const topCraters = this.craters.allCraters
+            .sort((a, b) => parseFloat(b.properties['Crater diamter [km]']) - parseFloat(a.properties['Crater diamter [km]']))
+            .slice(0, 10);
+    
+        const craterBar = document.getElementById('craterBar');
+        craterBar.innerHTML = `
+            <div class="bar-item"><strong>Top Impact Craters:</strong></div>
+            <div class="bar-item view-all" data-type="crater"><strong>View All</strong></div>
+            ${topCraters.map(c => `
+                <div class="bar-item" onclick="window.app.flyToCrater('${c.properties.Name}')">
+                    💥 ${c.properties.Name} - ${c.properties['Crater diamter [km]']} km
+                </div>
+            `).join('')}
+        `;
     }
 
     focusOnMeteorite(id) {
