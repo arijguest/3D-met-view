@@ -18,17 +18,8 @@ export class CraterManager {
     }
 
     async loadData() {
-        try {
-            const response = await fetch('/static/data/earth-impact-craters.geojson');
-            if (!response.ok) throw new Error('Network response was not ok');
-            
-            const data = await response.json();
-            this.allCraters = data.features;
-            return this.allCraters;
-        } catch (error) {
-            console.error('Error loading crater data:', error);
-            return [];
-        }
+        this.allCraters = window.INITIAL_CRATERS.features;
+        return this.allCraters;
     }
 
     processAges() {
