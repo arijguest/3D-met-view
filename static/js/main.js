@@ -59,6 +59,49 @@ class App {
         return `${mass} g`;
     }
 
+    flyToMeteorite(id) {
+        const meteorite = this.meteorites.filteredMeteorites.find(m => m.id === id);
+        if (!meteorite) return;
+        
+        const coords = this.meteorites.getCoordinates(meteorite);
+        if (!coords) return;
+
+        this.viewer.camera.flyTo({
+            destination: Cesium.Cartesian3.fromDegrees(
+                coords.longitude,
+                coords.latitude,
+                500000
+            ),
+            orientation: {
+                heading: 0,
+                pitch: Cesium.Math.toRadians(-90),
+                roll: 0
+            },
+            duration: 2
+        });
+    }
+
+    flyToCrater(name) {
+        const crater = this.craters.filteredCraters.find(c => c.properties.Name === name);
+        if (!crater) return;
+        
+        const coords = this.craters.getCoordinates(crater);
+        if (!coords) return;
+
+        this.viewer.camera.flyTo({
+            destination: Cesium.Cartesian3.fromDegrees(
+                coords.longitude,
+                coords.latitude,
+                500000
+            ),
+            orientation: {
+                heading: 0,
+                pitch: Cesium.Math.toRadians(-90),
+                roll: 0
+            },
+            duration: 2
+        });
+    }
 
     initializeFilters() {
         // Initialize range sliders with data-driven values
