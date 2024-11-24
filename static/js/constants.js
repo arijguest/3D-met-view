@@ -1,14 +1,3 @@
-console.log('Constants loaded:', {
-    CONFIG,
-    COLOR_SCHEMES,
-    FILTER_RANGES
-});
-
-console.group('Module Loading');
-console.log('Constants module loaded');
-console.log('Configuration:', CONFIG);
-console.groupEnd();
-
 export const CONFIG = {
     CESIUM_TOKEN: window.CESIUM_TOKEN,
     API_URL: 'https://data.nasa.gov/resource/gh4g-9sfh.json',
@@ -93,3 +82,13 @@ export const SIZE_THRESHOLDS = {
     }
 };
 
+console.log('Constants loaded:', {
+    CONFIG,
+    COLOR_SCHEMES,
+    FILTER_RANGES
+});
+
+console.group('Module Loading');
+console.log('Constants module loaded');
+console.log('Configuration:', CONFIG);
+console.groupEnd();
