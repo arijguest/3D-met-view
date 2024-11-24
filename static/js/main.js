@@ -41,7 +41,8 @@ class App {
         });
 
         this.viewer.scene.globe.enableLighting = true;
-        this.viewer.scene.globe.depthTestAgainstTerrain = true;
+        this.viewer.scene.globe.depthTestAgainstTerrain = false;
+        this.viewer.scene.orderIndependentTranslucency = false;
     }
 
     initializeManagers() {
