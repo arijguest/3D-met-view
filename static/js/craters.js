@@ -136,6 +136,18 @@ export class CraterManager {
         return Cesium.Color.GRAY.withAlpha(0.8);
     }
 
+    getCraterTooltip(crater) {
+        const props = crater.properties;
+        return `
+            <b>Name:</b> ${props.Name}<br>
+            <b>Diameter:</b> ${props['Crater diamter [km]']} km<br>
+            <b>Age:</b> ${props['Age [Myr]']} Myr<br>
+            <b>Country:</b> ${props.Country}<br>
+            <b>Target:</b> ${props.Target}<br>
+            <b>Type:</b> ${props['Crater type']}<br>
+        `;
+    }
+    
     getTopCraters(count = 10) {
         return [...this.filteredCraters]
             .sort((a, b) => {
