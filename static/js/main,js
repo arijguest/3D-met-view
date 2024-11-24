@@ -1,16 +1,20 @@
-import { MeteoriteManager } from './meteorites.js';
+mport { MeteoriteManager } from './meteorites.js';
 import { CraterManager } from './craters.js';
 import { UIManager } from './ui.js';
 import { CONFIG, COLOR_SCHEMES, FILTER_RANGES } from './constants.js';
 
 class App {
     constructor() {
-        console.log('Starting App initialization');
+        console.group('App Initialization');
+        console.log('Starting initialization');
+        console.log('Initial craters:', window.INITIAL_CRATERS?.features?.length);
+        console.log('Cesium token status:', !!window.CESIUM_TOKEN);
+        console.groupEnd();
+
         this.initializeCesium();
         this.initializeManagers();
         this.setupEventHandlers();
         this.loadInitialData();
-        console.log('App initialization complete');
     }
 
     initializeCesium() {
@@ -158,19 +162,13 @@ class App {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.group('Application Initialization');
-    console.log('DOM Content Loaded');
-    console.log('Initial Craters:', window.INITIAL_CRATERS?.features?.length || 0);
-    console.log('Cesium Token Status:', !!window.CESIUM_TOKEN);
-    
     try {
         window.app = new App();
         console.log('App initialized successfully');
     } catch (error) {
         console.error('App initialization failed:', error);
+        throw error;
     }
-    
-    console.groupEnd();
 });
 
 export default App;
