@@ -108,13 +108,19 @@ export class MeteoriteManager {
     }
 
     getCoordinates(meteorite) {
-        if (meteorite.geolocation?.latitude && meteorite.geolocation?.longitude) {
-            return {
-                latitude: parseFloat(meteorite.geolocation.latitude),
-                longitude: parseFloat(meteorite.geolocation.longitude)
-            };
-        }
-        if (meteorite.reclat && meteorite.reclong) {
+        if (meteorite.geolocation) {
+            if (meteorite.geolocation.latitude && meteorite.geolocation.longitude) {
+                return {
+                    latitude: parseFloat(meteorite.geolocation.latitude),
+                    longitude: parseFloat(meteorite.geolocation.longitude)
+                };
+            } else if (meteorite.geolocation.coordinates && meteorite.geolocation.coordinates.length === 2) {
+                return {
+                    longitude: parseFloat(meteorite.geolocation.coordinates[0]),
+                    latitude: parseFloat(meteorite.geolocation.coordinates[1])
+                };
+            }
+        } else if (meteorite.reclat && meteorite.reclong) {
             return {
                 latitude: parseFloat(meteorite.reclat),
                 longitude: parseFloat(meteorite.reclong)
