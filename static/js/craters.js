@@ -25,6 +25,10 @@ export class CraterManager {
         return this.allCraters;
     }
 
+    setVisibility(visible) {
+        this.dataSource.show = visible;
+    }
+    
     processAges() {
         this.allCraters.forEach(crater => {
             const ageStr = crater.properties['Age [Myr]'];
