@@ -136,6 +136,68 @@ export class UIManager {
         this.elements.tooltip.style.left = `${x}px`;
         this.elements.tooltip.style.top = `${y}px`;
     }
+    generateBarContent(items, type) {
+    const prefix = type === 'meteorite' ? '🌠' : '💥';
+    let content = `<div class="bar-item"><strong>Top ${type === 'meteorite' ? 'Meteorites' : 'Craters'}:</strong></div>`;
+    content += `<div class="bar-item"><strong>View All</strong></div>`;
+    
+    items.forEach(item => {
+        const name = type === 'meteorite' ? item.name : item.properties.Name;
+        const value = type === 'meteorite' ? this.formatMass(item.mass) : `${item.properties['Crater diamter [km]']} km`;
+        content += `<div class="bar-item">${prefix} ${name} - ${value}</div>`;
+    });
+    
+    return content;
+    }
+
+    hideTooltip() {
+        if (this.elements.tooltip) {
+            this.elements.tooltip.style.display = 'none';
+        }
+    }
+    
+    getTooltipContent(entity) {
+        if (!entity || !entity.id) return null;
+        
+        if (entity.id.properties?.isMeteorite) {
+            return this.getMeteoriteTooltip(entity.id.properties.meteorite);
+        }
+        
+        if (entity.id.properties?.isImpactCrater) {
+            return this.getCraterTooltip(entity.id.properties.crater);
+        }
+        
+        return null;
+    }
+    
+    getMeteoriteTooltip(meteorite) {
+        return `
+            <b>Name:</b> ${meteorite.name || 'Unknown'}<br>
+            <b>Mass:</b> ${this.formatMass(meteorite.mass)}<br>
+            <b>Class:</b> ${meteorite.recclass || 'Unknown'}<br>
+            <b>Year:</b> ${meteorite.year ? new Date(meteorite.year).getFullYear() : 'Unknown'}
+        `;
+    }
+    
+    getCraterTooltip(crater) {
+        return `
+            <b>Name:</b> ${crater.Name || 'Unknown'}<br>
+            <b>Diameter:</b> ${crater['Crater diamter [km]'] || 'Unknown'} km<br>
+            <b>Age:</b> ${crater['Age [Myr]'] || 'Unknown'} Myr<br>
+            <b>Location:</b> ${crater.Country || 'Unknown'}
+        `;
+    }
+    
+    formatMass(mass) {
+        if (!mass) return 'Unknown';
+        const numMass = parseFloat(mass);
+        if (isNaN(numMass)) return 'Unknown';
+        
+        if (numMass >= 1000000) return `${(numMass/1000000).toFixed(2)} tonnes`;
+        if (numMass >= 1000) return `${(numMass/1000).toFixed(2)} kg`;
+        return `${numMass.toFixed(2)} g`;
+    }
+
 
     updateDataBars(meteorites, craters) {
         this.updateMeteoriteBar(meteorites);
