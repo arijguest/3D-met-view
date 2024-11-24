@@ -15,9 +15,6 @@ export class MeteoriteManager {
         this.initializeDataSource();
     }
 
-    console.log('Meteorite module loaded successfully');
-    console.groupEnd();
-
     initializeDataSource() {
         this.viewer.dataSources.add(this.dataSource);
         this.setupClustering();
