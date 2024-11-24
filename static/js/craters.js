@@ -19,6 +19,9 @@ export class CraterManager {
 
     async loadData() {
         this.allCraters = window.INITIAL_CRATERS.features;
+        this.processAges();
+        this.filteredCraters = [...this.allCraters];
+        this.updateEntities(this.filteredCraters);
         return this.allCraters;
     }
 
@@ -59,7 +62,7 @@ export class CraterManager {
     }
 
     filterData(filterState) {
-        return this.allCraters.filter(feature => {
+        this.filteredCraters = this.allCraters.filter(feature => {
             const props = feature.properties;
             const diameter = parseFloat(props['Crater diamter [km]']) || 0;
             const age_min = props.age_min ?? filterState.age.min;
@@ -78,6 +81,9 @@ export class CraterManager {
 
             return diameterMatch && ageMatch && rockMatch && typeMatch;
         });
+
+        this.updateEntities(this.filteredCraters);
+        return this.filteredCraters;
     }
 
     updateEntities(filteredData = this.filteredCraters) {
@@ -129,7 +135,7 @@ export class CraterManager {
     }
 
     getColor(diameter) {
-        const selectedScheme = document.getElementById('craterColorScheme').value;
+        const selectedScheme = document.getElementById('craterColorScheme').value.toUpperCase();
         const scheme = COLOR_SCHEMES[selectedScheme].craters;
         
         for (const { threshold, color } of scheme) {
@@ -159,5 +165,8 @@ export class CraterManager {
             })
             .slice(0, count);
     }
-}
 
+    setVisibility(visible) {
+        this.dataSource.show = visible;
+    }
+}
