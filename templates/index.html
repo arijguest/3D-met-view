@@ -49,11 +49,20 @@
     <script>
         window.CESIUM_TOKEN = '{{ cesium_token }}';
         window.INITIAL_CRATERS = {{ impact_craters|tojson|safe }};
+        
+        // Environment verification
+        console.group('Environment Test');
+        console.log('Cesium loaded:', typeof Cesium !== 'undefined');
+        console.log('Token present:', !!window.CESIUM_TOKEN);
+        console.log('Craters loaded:', window.INITIAL_CRATERS?.features?.length);
+        console.groupEnd();
     </script>
-    <script type="module" defer src="{{ url_for('static', filename='js/constants.js') }}"></script>
-    <script type="module" defer src="{{ url_for('static', filename='js/meteorites.js') }}"></script>
-    <script type="module" defer src="{{ url_for('static', filename='js/craters.js') }}"></script>
-    <script type="module" defer src="{{ url_for('static', filename='js/ui.js') }}"></script>
-    <script type="module" defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <!-- Module imports with crossorigin -->
+    <script type="module" crossorigin="anonymous" src="{{ url_for('static', filename='js/constants.js') }}"></script>
+    <script type="module" crossorigin="anonymous" src="{{ url_for('static', filename='js/meteorites.js') }}"></script>
+    <script type="module" crossorigin="anonymous" src="{{ url_for('static', filename='js/craters.js') }}"></script>
+    <script type="module" crossorigin="anonymous" src="{{ url_for('static', filename='js/ui.js') }}"></script>
+    <script type="module" crossorigin="anonymous" src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
