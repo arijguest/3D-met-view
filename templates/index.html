@@ -50,10 +50,10 @@
         window.CESIUM_TOKEN = '{{ cesium_token }}';
         window.INITIAL_CRATERS = {{ impact_craters|tojson|safe }};
     </script>
-    <script type="module" src="{{ url_for('static', filename='js/constants.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='js/meteorites.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='js/craters.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='js/ui.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script type="module" defer src="{{ url_for('static', filename='js/constants.js') }}"></script>
+    <script type="module" defer src="{{ url_for('static', filename='js/meteorites.js') }}"></script>
+    <script type="module" defer src="{{ url_for('static', filename='js/craters.js') }}"></script>
+    <script type="module" defer src="{{ url_for('static', filename='js/ui.js') }}"></script>
+    <script type="module" defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
