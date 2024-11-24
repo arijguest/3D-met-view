@@ -1,7 +1,8 @@
-import { COLOR_SCHEMES } from './constants.js';
+import { COLOR_SCHEMES, FILTER_RANGES } from './constants.js';
 
 export class UIManager {
     constructor() {
+        console.log('UI module loading');
         this.colorSchemes = COLOR_SCHEMES;
         this.initializeElements();
         this.setupEventListeners();
@@ -15,26 +16,30 @@ export class UIManager {
         this.updateLegends();
     }
 
-    initializeFilters() {
-        // Year range
-        const yearMin = document.getElementById('yearRangeMin');
-        const yearMax = document.getElementById('yearRangeMax');
-        yearMin.value = FILTER_RANGES.YEAR.MIN;
-        yearMax.value = FILTER_RANGES.YEAR.MAX;
-    
-        // Mass range
-        const massMin = document.getElementById('massRangeMin');
-        const massMax = document.getElementById('massRangeMax');
-        massMin.value = FILTER_RANGES.MASS.MIN;
-        massMax.value = FILTER_RANGES.MASS.MAX;
-    
-        // Diameter range
-        const diameterMin = document.getElementById('diameterRangeMin');
-        const diameterMax = document.getElementById('diameterRangeMax');
-        diameterMin.value = FILTER_RANGES.DIAMETER.MIN;
-        diameterMax.value = FILTER_RANGES.DIAMETER.MAX;
-    
-        this.updateFilterDisplay();
+    initializeFilters(meteorites, craters) {
+        // Set ranges based on actual data
+        const maxDiameter = Math.max(...craters
+            .map(c => parseFloat(c.properties['Crater diamter [km]']))
+            .filter(d => !isNaN(d)));
+        
+        const maxAge = Math.max(...craters
+            .map(c => parseFloat(c.properties['Age [Myr]']))
+            .filter(a => !isNaN(a)));
+
+        // Initialize all dropdowns
+        this.populateDropdowns(meteorites, craters);
+
+        // Set slider values
+        document.getElementById('yearRangeMin').value = FILTER_RANGES.YEAR.MIN;
+        document.getElementById('yearRangeMax').value = FILTER_RANGES.YEAR.MAX;
+        document.getElementById('massRangeMin').value = FILTER_RANGES.MASS.MIN;
+        document.getElementById('massRangeMax').value = FILTER_RANGES.MASS.MAX;
+        document.getElementById('diameterRangeMin').value = 0;
+        document.getElementById('diameterRangeMax').value = maxDiameter;
+        document.getElementById('ageRangeMin').value = 0;
+        document.getElementById('ageRangeMax').value = maxAge;
+
+        this.updateFilterDisplays();
     }
 
     initializeInfoMenu() {
@@ -56,6 +61,18 @@ export class UIManager {
         };
     }
 
+    setupFullscreenHandler() {
+        this.elements.fullscreenButton.onclick = () => {
+            if (!document.fullscreenElement) {
+                document.getElementById('wrapper').requestFullscreen();
+                this.elements.fullscreenButton.textContent = '🡼 Exit Fullscreen';
+            } else {
+                document.exitFullscreen();
+                this.elements.fullscreenButton.textContent = '⛶ Fullscreen';
+            }
+        };
+    }
+    
     closeOtherMenus(openedMenu) {
         const menus = {
             'options': 'controls',
@@ -155,7 +172,8 @@ export class UIManager {
             searchInput: document.getElementById('searchInput'),
             controls: document.getElementById('controls'),
             keyMenu: document.getElementById('keyMenu'),
-            infoModal: document.getElementById('infoModal')
+            infoModal: document.getElementById('infoModal'),
+            fullscreenButton: document.getElementById('fullscreenButton')
         };
     }
 
@@ -165,6 +183,7 @@ export class UIManager {
         this.setupFilterHandlers();
         this.setupTableHandlers();
         this.setupSearchHandler();
+        this.setupFullscreenHandler();
     }
 
     setupMenuHandlers() {
@@ -182,6 +201,48 @@ export class UIManager {
         });
     }
 
+    populateDropdowns(meteorites, craters) {
+        // Meteorite classes
+        const classes = [...new Set(meteorites
+            .map(m => m.recclass)
+            .filter(c => c))];
+        this.populateSelect('meteoriteClassSelect', classes);
+
+        // Target rocks
+        const rocks = [...new Set(craters
+            .map(c => c.properties.Target)
+            .filter(r => r))];
+        this.populateSelect('targetRockSelect', rocks);
+
+        // Crater types
+        const types = [...new Set(craters
+            .map(c => c.properties['Crater type'])
+            .filter(t => t))];
+        this.populateSelect('craterTypeSelect', types);
+    }
+
+    populateSelect(id, options) {
+        const select = document.getElementById(id);
+        select.innerHTML = options
+            .sort()
+            .map(opt => `<option value="${opt}">${opt}</option>`)
+            .join('');
+    }
+
+    updateFilterDisplays() {
+        document.getElementById('yearRangeValue').textContent = 
+            `${document.getElementById('yearRangeMin').value} - ${document.getElementById('yearRangeMax').value}`;
+        
+        document.getElementById('massRangeValue').textContent = 
+            `${this.formatMass(document.getElementById('massRangeMin').value)} - ${this.formatMass(document.getElementById('massRangeMax').value)}`;
+        
+        document.getElementById('diameterRangeValue').textContent = 
+            `${document.getElementById('diameterRangeMin').value} - ${document.getElementById('diameterRangeMax').value} km`;
+        
+        document.getElementById('ageRangeValue').textContent = 
+            `${document.getElementById('ageRangeMin').value} - ${document.getElementById('ageRangeMax').value} Myr`;
+    }
+    
     toggleMenu(menuId) {
         const menu = document.getElementById(menuId);
         if (!menu) return;
