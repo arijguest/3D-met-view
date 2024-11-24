@@ -228,6 +228,19 @@ class App {
     }
 
     setupEventHandlers() {
+        // Toggle visibility handlers
+        document.getElementById('toggleMeteorites').addEventListener('change', (e) => {
+            this.meteorites.setVisibility(e.target.checked);
+        });
+    
+        document.getElementById('toggleCraters').addEventListener('change', (e) => {
+            this.craters.setVisibility(e.target.checked);
+        });
+    
+        // Clustering handler
+        document.getElementById('clusterMeteorites').addEventListener('change', (e) => {
+            this.meteorites.setClusteringEnabled(e.target.checked);
+        });
         // Modal handlers
         window.openModal = () => {
             document.getElementById('modal').style.display = 'block';
@@ -252,6 +265,7 @@ class App {
                 event.target.style.display = 'none';
             }
         };
+        window.app = this;
     }
 
     setupEntityInteraction() {
