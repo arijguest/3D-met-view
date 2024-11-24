@@ -293,18 +293,23 @@ export class UIManager {
     }
 
     setupModalHandlers() {
-        ['modal', 'craterModal', 'infoModal'].forEach(modalId => {
-            const modal = document.getElementById(modalId);
-            if (!modal) return;
-            
-            const closeBtn = modal.querySelector('.close-button');
-            if (closeBtn) {
-                closeBtn.onclick = () => this.closeModal(modalId);
-            }
-            
-            window.onclick = (event) => {
-                if (event.target === modal) this.closeModal(modalId);
-            };
+        // View All buttons
+        const viewAllButtons = {
+            'viewAllMeteorites': 'modal',
+            'viewAllCraters': 'craterModal'
+        };
+    
+        Object.entries(viewAllButtons).forEach(([buttonId, modalId]) => {
+            document.getElementById(buttonId)?.addEventListener('click', () => {
+                document.getElementById(modalId).style.display = 'block';
+            });
+        });
+    
+        // Close buttons
+        document.querySelectorAll('.close-button').forEach(button => {
+            button.addEventListener('click', () => {
+                button.closest('.modal').style.display = 'none';
+            });
         });
     }
 
