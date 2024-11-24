@@ -8,6 +8,8 @@
 ├── static/
 │   ├── css/
 │   │   └── styles.css
+│   └── data/
+│   │   └── earth-impact-craters.json
 │   └── js/
 │       ├── main.js
 │       ├── meteorites.js
