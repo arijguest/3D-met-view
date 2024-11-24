@@ -15,6 +15,28 @@ export class UIManager {
         this.updateLegends();
     }
 
+    initializeFilters() {
+        // Year range
+        const yearMin = document.getElementById('yearRangeMin');
+        const yearMax = document.getElementById('yearRangeMax');
+        yearMin.value = FILTER_RANGES.YEAR.MIN;
+        yearMax.value = FILTER_RANGES.YEAR.MAX;
+    
+        // Mass range
+        const massMin = document.getElementById('massRangeMin');
+        const massMax = document.getElementById('massRangeMax');
+        massMin.value = FILTER_RANGES.MASS.MIN;
+        massMax.value = FILTER_RANGES.MASS.MAX;
+    
+        // Diameter range
+        const diameterMin = document.getElementById('diameterRangeMin');
+        const diameterMax = document.getElementById('diameterRangeMax');
+        diameterMin.value = FILTER_RANGES.DIAMETER.MIN;
+        diameterMax.value = FILTER_RANGES.DIAMETER.MAX;
+    
+        this.updateFilterDisplay();
+    }
+    
     populateColorSchemes() {
         const meteoriteSelect = document.getElementById('meteoriteColorScheme');
         const craterSelect = document.getElementById('craterColorScheme');
