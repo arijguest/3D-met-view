@@ -15,6 +15,15 @@ export class MeteoriteManager {
         this.initializeDataSource();
     }
 
+    setVisibility(visible) {
+        this.dataSource.show = visible;
+    }
+
+    setClusteringEnabled(enabled) {
+        this.clusteringEnabled = enabled;
+        this.updateClustering(this.viewer.camera.positionCartographic.height);
+    }
+    
     initializeDataSource() {
         this.viewer.dataSources.add(this.dataSource);
         this.setupClustering();
