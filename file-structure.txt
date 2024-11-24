@@ -16,5 +16,11 @@
 │       └── constants.js
 ├── templates/
 │   └── index.html
+│   └── components/
+│     ├── controls.html
+│     ├── key_menu.html
+│     ├── info_modal.html
+│     ├── meteorite_modal.html
+│     └── crater_modal.html
 ├── requirements.txt
 └── app.py
