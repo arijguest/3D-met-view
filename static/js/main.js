@@ -34,6 +34,27 @@ class App {
             this.craters.updateEntities();
             this.ui.updateLegends();
         });
+    setupFilterHandlers() {
+        document.getElementById('applyFiltersButton').addEventListener('click', () => {
+            this.applyFilters();
+        });
+
+        document.getElementById('refreshButton').addEventListener('click', () => {
+            this.resetFilters();
+        });
+
+        // Toggle visibility handlers
+        document.getElementById('toggleMeteorites').addEventListener('change', (e) => {
+            this.meteorites.setVisibility(e.target.checked);
+        });
+
+        document.getElementById('toggleCraters').addEventListener('change', (e) => {
+            this.craters.setVisibility(e.target.checked);
+        });
+
+        document.getElementById('clusterMeteorites').addEventListener('change', (e) => {
+            this.meteorites.setClusteringEnabled(e.target.checked);
+        });
     }
 
     async initializeCesium() {
@@ -177,6 +198,53 @@ class App {
             document.getElementById('wrapper').requestFullscreen();
         } else {
             document.exitFullscreen();
+        }
+    }
+
+    applyFilters() {
+        const filterState = {
+            year: {
+                min: parseInt(document.getElementById('yearRangeMin').value),
+                max: parseInt(document.getElementById('yearRangeMax').value)
+            },
+            mass: {
+                min: parseInt(document.getElementById('massRangeMin').value),
+                max: parseInt(document.getElementById('massRangeMax').value)
+            },
+            diameter: {
+                min: parseFloat(document.getElementById('diameterRangeMin').value),
+                max: parseFloat(document.getElementById('diameterRangeMax').value)
+            },
+            age: {
+                min: parseFloat(document.getElementById('ageRangeMin').value),
+                max: parseFloat(document.getElementById('ageRangeMax').value)
+            },
+            meteoriteClasses: Array.from(document.getElementById('meteoriteClassSelect').selectedOptions).map(opt => opt.value),
+            targetRocks: Array.from(document.getElementById('targetRockSelect').selectedOptions).map(opt => opt.value),
+            craterTypes: Array.from(document.getElementById('craterTypeSelect').selectedOptions).map(opt => opt.value)
+        };
+
+        this.validateAndNormalizeRanges(filterState);
+        
+        const filteredMeteorites = this.meteorites.filterData(filterState);
+        const filteredCraters = this.craters.filterData(filterState);
+
+        this.meteorites.updateEntities(filteredMeteorites);
+        this.craters.updateEntities(filteredCraters);
+        this.ui.updateDataBars(filteredMeteorites, filteredCraters);
+        this.ui.updateFilterCounts(filteredMeteorites.length, filteredCraters.length);
+    }
+
+    validateAndNormalizeRanges(filterState) {
+        // Swap min/max if needed
+        for (const range of ['year', 'mass', 'diameter', 'age']) {
+            if (filterState[range].min > filterState[range].max) {
+                [filterState[range].min, filterState[range].max] = 
+                [filterState[range].max, filterState[range].min];
+                
+                document.getElementById(`${range}RangeMin`).value = filterState[range].min;
+                document.getElementById(`${range}RangeMax`).value = filterState[range].max;
+            }
         }
     }
 }
