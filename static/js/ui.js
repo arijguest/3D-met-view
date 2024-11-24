@@ -1,9 +1,78 @@
+import { COLOR_SCHEMES } from './constants.js';
+
 export class UIManager {
     constructor() {
-        console.log('UI module loading');
         this.initializeElements();
         this.setupEventListeners();
         this.searchDebounceTimer = null;
+        this.initializeColorSchemes();
+    }
+
+    initializeColorSchemes() {
+        this.colorSchemes = COLOR_SCHEMES;
+        this.populateColorSchemes();
+        this.updateLegends();
+    }
+
+    populateColorSchemes() {
+        const meteoriteSelect = document.getElementById('meteoriteColorScheme');
+        const craterSelect = document.getElementById('craterColorScheme');
+        
+        Object.keys(this.colorSchemes).forEach(scheme => {
+            meteoriteSelect.add(new Option(scheme, scheme));
+            craterSelect.add(new Option(scheme, scheme));
+        });
+
+        // Set default selections
+        meteoriteSelect.value = 'Default';
+        craterSelect.value = 'Blue Scale';
+    }
+
+    updateLegends() {
+        this.updateMeteoriteLegend();
+        this.updateCraterLegend();
+    }
+
+    updateMeteoriteLegend() {
+        const legendContainer = document.getElementById('meteoriteLegend');
+        const selectedScheme = document.getElementById('meteoriteColorScheme').value;
+        const scheme = this.colorSchemes[selectedScheme].meteorites;
+
+        legendContainer.innerHTML = `
+            <h3>🌠 Meteorites</h3>
+            <ul class="legend-list">
+                ${this.generateLegendItems(scheme, 'mass')}
+            </ul>
+        `;
+    }
+
+    updateCraterLegend() {
+        const legendContainer = document.getElementById('craterLegend');
+        const selectedScheme = document.getElementById('craterColorScheme').value;
+        const scheme = this.colorSchemes[selectedScheme].craters;
+
+        legendContainer.innerHTML = `
+            <h3>💥 Impact Craters</h3>
+            <ul class="legend-list">
+                ${this.generateLegendItems(scheme, 'diameter')}
+            </ul>
+        `;
+    }
+
+    generateLegendItems(scheme, type) {
+        const sortedScheme = [...scheme].sort((a, b) => a.threshold - b.threshold);
+        return sortedScheme.map((item, index) => {
+            const label = type === 'mass' 
+                ? `Mass ${index === 0 ? '<' : '≥'} ${this.formatMass(item.threshold)}`
+                : `Diameter ${index === 0 ? '<' : '≥'} ${item.threshold} km`;
+            
+            return `
+                <li>
+                    <span class="legend-icon" style="background-color: ${item.color.toCssColorString()};"></span>
+                    ${label}
+                </li>
+            `;
+        }).join('');
     }
 
     initializeElements() {
