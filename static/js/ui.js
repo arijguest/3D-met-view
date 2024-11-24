@@ -116,7 +116,54 @@ export class UIManager {
         }
     }
 
-    // [Rest of the methods remain unchanged]
+    updateTooltip(entity, position) {
+        if (!entity || !position) {
+            this.hideTooltip();
+            return;
+        }
+
+        const content = this.getTooltipContent(entity);
+        if (!content) return;
+
+        this.elements.tooltip.innerHTML = content;
+        this.elements.tooltip.style.display = 'block';
+        this.updateTooltipPosition(position);
+    }
+
+    updateTooltipPosition(position) {
+        const x = position.x + 15;
+        const y = position.y + 15;
+        this.elements.tooltip.style.left = `${x}px`;
+        this.elements.tooltip.style.top = `${y}px`;
+    }
+
+    updateDataBars(meteorites, craters) {
+        this.updateMeteoriteBar(meteorites);
+        this.updateCraterBar(craters);
+    }
+
+    updateMeteoriteBar(meteorites) {
+        const content = this.generateBarContent(meteorites, 'meteorite');
+        this.elements.meteoriteBar.innerHTML = content;
+    }
+
+    updateCraterBar(craters) {
+        const content = this.generateBarContent(craters, 'crater');
+        this.elements.craterBar.innerHTML = content;
+    }
+
+    updateFilterCounts(meteoriteCount, craterCount) {
+        document.getElementById('totalMeteorites').textContent = `Total Meteorites: ${meteoriteCount}`;
+        document.getElementById('totalCraters').textContent = `Total Craters: ${craterCount}`;
+    }
+
+    showLoadingIndicator() {
+        this.elements.loadingIndicator.style.display = 'block';
+    }
+
+    hideLoadingIndicator() {
+        this.elements.loadingIndicator.style.display = 'none';
+    }
 
     debounce(callback, delay = 300) {
         clearTimeout(this.searchDebounceTimer);
