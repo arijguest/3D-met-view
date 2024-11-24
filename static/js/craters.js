@@ -86,6 +86,22 @@ export class CraterManager {
         return this.filteredCraters;
     }
 
+    initializeCraterSliders() {
+        const diameters = this.allCraters
+            .map(c => parseFloat(c.properties['Crater diamter [km]']))
+            .filter(d => !isNaN(d));
+        
+        const ages = this.allCraters
+            .map(c => c.properties.age_max)
+            .filter(a => !isNaN(a));
+    
+        const maxDiameter = Math.max(...diameters);
+        const maxAge = Math.max(...ages);
+    
+        document.getElementById('diameterRangeMax').value = maxDiameter;
+        document.getElementById('ageRangeMax').value = maxAge;
+    }
+
     updateEntities(filteredData = this.filteredCraters) {
         this.dataSource.entities.removeAll();
         this.entities = [];
@@ -147,12 +163,12 @@ export class CraterManager {
     getCraterTooltip(crater) {
         const props = crater.properties;
         return `
-            <b>Name:</b> ${props.Name}<br>
-            <b>Diameter:</b> ${props['Crater diamter [km]']} km<br>
-            <b>Age:</b> ${props['Age [Myr]']} Myr<br>
-            <b>Country:</b> ${props.Country}<br>
-            <b>Target:</b> ${props.Target}<br>
-            <b>Type:</b> ${props['Crater type']}<br>
+            <b>Name:</b> ${props.Name || 'Unknown'}<br>
+            <b>Diameter:</b> ${props['Crater diamter [km]'] || 'Unknown'} km<br>
+            <b>Age:</b> ${props['Age [Myr]'] || 'Unknown'} Myr<br>
+            <b>Country:</b> ${props.Country || 'Unknown'}<br>
+            <b>Target:</b> ${props.Target || 'Unknown'}<br>
+            <b>Type:</b> ${props['Crater type'] || 'Unknown'}<br>
         `;
     }
     
