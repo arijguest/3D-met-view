@@ -227,18 +227,21 @@ export class UIManager {
         this.elements.tooltip.style.left = `${x}px`;
         this.elements.tooltip.style.top = `${y}px`;
     }
+    
     generateBarContent(items, type) {
-    const prefix = type === 'meteorite' ? '🌠' : '💥';
-    let content = `<div class="bar-item"><strong>Top ${type === 'meteorite' ? 'Meteorites' : 'Craters'}:</strong></div>`;
-    content += `<div class="bar-item"><strong>View All</strong></div>`;
-    
-    items.forEach(item => {
-        const name = type === 'meteorite' ? item.name : item.properties.Name;
-        const value = type === 'meteorite' ? this.formatMass(item.mass) : `${item.properties['Crater diamter [km]']} km`;
-        content += `<div class="bar-item">${prefix} ${name} - ${value}</div>`;
-    });
-    
-    return content;
+        return items.map(item => {
+            if (type === 'meteorite') {
+                const mass = this.formatMass(item.mass);
+                return `<div class="bar-item" onclick="window.app.focusOnMeteorite('${item.id}')">
+                    🌠 ${item.name} - ${mass}
+                </div>`;
+            } else {
+                const diameter = item.properties['Crater diamter [km]'];
+                return `<div class="bar-item" onclick="window.app.focusOnCrater('${item.properties.Name}')">
+                    💥 ${item.properties.Name} - ${diameter} km
+                </div>`;
+            }
+        }).join('');
     }
 
     hideTooltip() {
@@ -317,6 +320,24 @@ export class UIManager {
         `;
     }
 
+    updateMeteoriteBar(meteorites) {
+        const content = this.generateBarContent(meteorites, 'meteorite');
+        document.getElementById('meteoriteBar').innerHTML = `
+            <div class="bar-item"><strong>Top Meteorites:</strong></div>
+            <div class="bar-item" onclick="openModal()"><strong>View All</strong></div>
+            ${content}
+        `;
+    }
+
+    updateCraterBar(craters) {
+        const content = this.generateBarContent(craters, 'crater');
+        document.getElementById('craterBar').innerHTML = `
+            <div class="bar-item"><strong>Top Impact Craters:</strong></div>
+            <div class="bar-item" onclick="openCraterModal()"><strong>View All</strong></div>
+            ${content}
+        `;
+    }
+    
     updateFilterCounts(meteoriteCount, craterCount) {
         document.getElementById('totalMeteorites').textContent = `Total Meteorites: ${meteoriteCount}`;
         document.getElementById('totalCraters').textContent = `Total Craters: ${craterCount}`;
