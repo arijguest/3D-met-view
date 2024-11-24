@@ -37,8 +37,8 @@ export class UIManager {
     updateMeteoriteLegend() {
         const legendContainer = document.getElementById('meteoriteLegend');
         const selectedScheme = document.getElementById('meteoriteColorScheme').value;
-        const scheme = COLOR_SCHEMES[selectedScheme].colors;
-
+        const scheme = COLOR_SCHEMES[selectedScheme].meteorites;  // Changed from .colors to .meteorites
+    
         legendContainer.innerHTML = `
             <h3>🌠 Meteorites</h3>
             <ul class="legend-list">
@@ -46,12 +46,12 @@ export class UIManager {
             </ul>
         `;
     }
-
+    
     updateCraterLegend() {
         const legendContainer = document.getElementById('craterLegend');
         const selectedScheme = document.getElementById('craterColorScheme').value;
-        const scheme = COLOR_SCHEMES[selectedScheme].craterColors;
-
+        const scheme = COLOR_SCHEMES[selectedScheme].craters;  // Using .craters directly
+    
         legendContainer.innerHTML = `
             <h3>💥 Impact Craters</h3>
             <ul class="legend-list">
