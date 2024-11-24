@@ -1,3 +1,5 @@
+console.log('Craters module loading');
+
 import { CONFIG, COLOR_SCHEMES, FILTER_RANGES } from './constants.js';
 
 export class CraterManager {
