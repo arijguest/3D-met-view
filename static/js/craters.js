@@ -59,23 +59,25 @@ export class CraterManager {
     }
 
     filterData(filterState) {
-        const { diameter, age, targetRocks, craterTypes } = filterState;
-        
-        this.filteredCraters = this.allCraters.filter(crater => {
-            const props = crater.properties;
-            const craterDiameter = parseFloat(props['Crater diamter [km]']) || 0;
-            const ageMin = props.age_min;
-            const ageMax = props.age_max;
+        return this.allCraters.filter(feature => {
+            const props = feature.properties;
+            const diameter = parseFloat(props['Crater diamter [km]']) || 0;
+            const age_min = props.age_min ?? filterState.age.min;
+            const age_max = props.age_max ?? filterState.age.max;
             const targetRock = props.Target || 'Unknown';
             const craterType = props['Crater type'] || 'Unknown';
 
-            return (craterDiameter >= diameter.min && craterDiameter <= diameter.max) &&
-                   (ageMax >= age.min && ageMin <= age.max) &&
-                   (!targetRocks.length || targetRocks.includes(targetRock)) &&
-                   (!craterTypes.length || craterTypes.includes(craterType));
-        });
+            const diameterMatch = diameter >= filterState.diameter.min && 
+                                diameter <= filterState.diameter.max;
+            const ageMatch = age_max >= filterState.age.min && 
+                            age_min <= filterState.age.max;
+            const rockMatch = filterState.targetRocks.length ? 
+                             filterState.targetRocks.includes(targetRock) : true;
+            const typeMatch = filterState.craterTypes.length ? 
+                             filterState.craterTypes.includes(craterType) : true;
 
-        return this.filteredCraters;
+            return diameterMatch && ageMatch && rockMatch && typeMatch;
+        });
     }
 
     updateEntities(filteredData = this.filteredCraters) {
