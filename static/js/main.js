@@ -11,11 +11,14 @@ class App {
         console.log('Cesium token status:', !!window.CESIUM_TOKEN);
         console.groupEnd();
 
-        this.initializeCesium().then(() => {
-            this.initializeManagers();
-            this.setupEventHandlers();
-            this.loadInitialData();
-        });
+        this.init();
+    }
+
+    async init() {
+        await this.initializeCesium();
+        this.initializeManagers();
+        this.setupEventHandlers();
+        this.loadInitialData();
     }
 
     async initializeCesium() {
@@ -42,25 +45,6 @@ class App {
     }
 }
 
-
-    async initializeCesium() {
-        const token = window.CESIUM_TOKEN || CONFIG.CESIUM_TOKEN;
-        Cesium.Ion.defaultAccessToken = token;
-        this.viewer = new Cesium.Viewer('cesiumContainer', {
-            terrainProvider: await Cesium.createWorldTerrainAsync(),
-            baseLayerPicker: true,
-            navigationHelpButton: true,
-            sceneModePicker: true,
-            animation: false,
-            timeline: false,
-            fullscreenButton: true,
-            homeButton: true,
-            geocoder: false,
-            infoBox: false,
-            selectionIndicator: false,
-            navigationInstructionsInitiallyVisible: false
-        });
-    }
 
     initializeManagers() {
         this.ui = new UIManager();
