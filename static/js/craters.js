@@ -127,7 +127,9 @@ export class CraterManager {
     }
 
     getColor(diameter) {
-        const scheme = COLOR_SCHEMES[this.currentColorScheme || 'DEFAULT'].craters;
+        const selectedScheme = document.getElementById('craterColorScheme').value;
+        const scheme = COLOR_SCHEMES[selectedScheme].craters;
+        
         for (const { threshold, color } of scheme) {
             if (diameter >= threshold) return color;
         }
