@@ -1,3 +1,5 @@
+console.log('Meteorites module loading');
+
 import { CONFIG, COLOR_SCHEMES, FILTER_RANGES } from './constants.js';
 
 export class MeteoriteManager {
