@@ -19,7 +19,7 @@ export class CraterManager {
 
     async loadData() {
         try {
-            const response = await fetch('/static/data/earth-impact-craters-v2.geojson');
+            const response = await fetch('/static/data/earth-impact-craters.geojson');
             if (!response.ok) throw new Error('Network response was not ok');
             
             const data = await response.json();
