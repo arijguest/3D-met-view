@@ -95,13 +95,18 @@ export class UIManager {
             'keyButton': 'keyMenu',
             'infoButton': 'infoModal'
         };
-
+    
         Object.entries(menuButtons).forEach(([buttonId, menuId]) => {
             const button = document.getElementById(buttonId);
-            const closeButton = document.querySelector(`#${menuId} .close-button`);
+            const menu = document.getElementById(menuId);
+            const closeButton = menu?.querySelector('.close-button');
             
-            button.onclick = () => this.toggleMenu(menuId);
-            closeButton.onclick = () => document.getElementById(menuId).style.display = 'none';
+            if (button && menu) {
+                button.onclick = () => this.toggleMenu(menuId);
+                if (closeButton) {
+                    closeButton.onclick = () => menu.style.display = 'none';
+                }
+            }
         });
     }
     
