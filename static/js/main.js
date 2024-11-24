@@ -1,4 +1,4 @@
-mport { MeteoriteManager } from './meteorites.js';
+import { MeteoriteManager } from './meteorites.js';
 import { CraterManager } from './craters.js';
 import { UIManager } from './ui.js';
 import { CONFIG, COLOR_SCHEMES, FILTER_RANGES } from './constants.js';
