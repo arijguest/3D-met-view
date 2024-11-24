@@ -1,9 +1,11 @@
-console.log('Meteorites module loading');
+console.group('Meteorite Module Initialization');
+console.log('Loading meteorites module');
 
 import { CONFIG, COLOR_SCHEMES, FILTER_RANGES } from './constants.js';
 
 export class MeteoriteManager {
     constructor(viewer) {
+        console.log('Initializing MeteoriteManager');
         this.viewer = viewer;
         this.dataSource = new Cesium.CustomDataSource('meteorites');
         this.allMeteorites = [];
@@ -13,6 +15,9 @@ export class MeteoriteManager {
         
         this.initializeDataSource();
     }
+
+    console.log('Meteorite module loaded successfully');
+    console.groupEnd();
 
     initializeDataSource() {
         this.viewer.dataSources.add(this.dataSource);
