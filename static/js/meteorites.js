@@ -33,6 +33,13 @@ export class MeteoriteManager {
         });
     }
 
+    // Turn on or off clustering (default on)
+    setClusteringEnabled(enabled) {
+        this.clusteringEnabled = enabled;
+        this.dataSource.clustering.enabled = enabled;
+    }
+
+
     async fetchData() {
         try {
             const response = await fetch(`${CONFIG.API_URL}?$limit=${CONFIG.API_LIMIT}`);
