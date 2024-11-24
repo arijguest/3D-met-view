@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌠 Global Meteorite Specimens & Impact Craters 💥</title>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div id="wrapper">
+        <div id="cesiumContainer"></div>
+        <!-- Header Component -->
+        <div id="header">
+            <h1>🌠 Global Meteorite Specimens & Impact Craters 💥</h1>
+            <div>
+                <button id="optionsButton">⚙️ Options</button>
+                <button id="keyButton">🔑 Key</button>
+                <button id="fullscreenButton">⛶ Fullscreen</button>
+                <button id="infoButton">ℹ️ Info</button>
+            </div>
+        </div>
+        
+        <!-- Control Panels -->
+        {% include 'components/controls.html' %}
+        {% include 'components/key_menu.html' %}
+        {% include 'components/info_modal.html' %}
+        
+        <!-- Data Bars -->
+        <div id="craterBar"></div>
+        <div id="meteoriteBar"></div>
+        
+        <!-- Interactive Elements -->
+        <div id="tooltip"></div>
+        
+        <!-- Modals -->
+        {% include 'components/meteorite_modal.html' %}
+        {% include 'components/crater_modal.html' %}
+        
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator">
+            <div class="spinner"></div>
+            <h3>Loading data, please wait...</h3>
+        </div>
+    </div>
+
+    <!-- Application Scripts -->
+    <script>
+        window.CESIUM_TOKEN = '{{ cesium_token }}';
+        window.INITIAL_CRATERS = {{ impact_craters|tojson|safe }};
+    </script>
+    <script type="module" src="{{ url_for('static', filename='js/constants.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/meteorites.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/craters.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/ui.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
 
