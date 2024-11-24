@@ -47,19 +47,34 @@ export class MeteoriteManager {
     }
 
     filterData(filterState) {
-        const { year, mass, meteoriteClasses } = filterState;
-        
-        this.filteredMeteorites = this.allMeteorites.filter(meteorite => {
-            const meteYear = meteorite.year ? new Date(meteorite.year).getFullYear() : null;
-            const meteClass = meteorite.recclass || 'Unknown';
-            const meteMass = meteorite.mass ? parseFloat(meteorite.mass) : null;
+        return this.allMeteorites.filter(m => {
+            const year = m.year ? new Date(m.year).getFullYear() : null;
+            const mass = m.mass ? parseFloat(m.mass) : null;
+            const recclass = m.recclass || 'Unknown';
 
-            return (!meteYear || (meteYear >= year.min && meteYear <= year.max)) &&
-                   (!meteMass || (meteMass >= mass.min && meteMass <= mass.max)) &&
-                   (!meteoriteClasses.length || meteoriteClasses.includes(meteClass));
+            const yearMatch = year ? (year >= filterState.year.min && year <= filterState.year.max) : true;
+            const massMatch = mass ? (mass >= filterState.mass.min && mass <= filterState.mass.max) : true;
+            const classMatch = filterState.meteoriteClasses.length ? 
+                              filterState.meteoriteClasses.includes(recclass) : true;
+
+            return yearMatch && massMatch && classMatch && this.hasValidCoordinates(m);
         });
+    }
 
-        return this.filteredMeteorites;
+    hasValidCoordinates(meteorite) {
+        let lat, lon;
+        if (meteorite.geolocation) {
+            if (meteorite.geolocation.latitude && meteorite.geolocation.longitude) {
+                lat = parseFloat(meteorite.geolocation.latitude);
+                lon = parseFloat(meteorite.geolocation.longitude);
+            } else if (meteorite.geolocation.coordinates?.length === 2) {
+                [lon, lat] = meteorite.geolocation.coordinates.map(parseFloat);
+            }
+        } else if (meteorite.reclat && meteorite.reclong) {
+            lat = parseFloat(meteorite.reclat);
+            lon = parseFloat(meteorite.reclong);
+        }
+        return !isNaN(lat) && !isNaN(lon);
     }
 
     updateEntities(filteredData = this.filteredMeteorites) {
