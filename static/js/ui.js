@@ -2,6 +2,7 @@ import { COLOR_SCHEMES } from './constants.js';
 
 export class UIManager {
     constructor() {
+        this.colorSchemes = COLOR_SCHEMES;
         this.initializeElements();
         this.setupEventListeners();
         this.searchDebounceTimer = null;
@@ -36,7 +37,7 @@ export class UIManager {
     updateMeteoriteLegend() {
         const legendContainer = document.getElementById('meteoriteLegend');
         const selectedScheme = document.getElementById('meteoriteColorScheme').value;
-        const scheme = this.colorSchemes[selectedScheme].meteorites;
+        const scheme = COLOR_SCHEMES[selectedScheme].colors;
 
         legendContainer.innerHTML = `
             <h3>🌠 Meteorites</h3>
@@ -49,7 +50,7 @@ export class UIManager {
     updateCraterLegend() {
         const legendContainer = document.getElementById('craterLegend');
         const selectedScheme = document.getElementById('craterColorScheme').value;
-        const scheme = this.colorSchemes[selectedScheme].craters;
+        const scheme = COLOR_SCHEMES[selectedScheme].craterColors;
 
         legendContainer.innerHTML = `
             <h3>💥 Impact Craters</h3>
