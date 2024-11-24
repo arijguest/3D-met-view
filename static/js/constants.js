@@ -5,7 +5,7 @@ console.log('Constants loaded:', {
 });
 
 export const CONFIG = {
-    CESIUM_TOKEN: 'CESIUM_ION_ACCESS_TOKEN',
+    CESIUM_TOKEN: window.CESIUM_TOKEN,
     API_URL: 'https://data.nasa.gov/resource/gh4g-9sfh.json',
     API_LIMIT: 50000,
     DEFAULT_ZOOM: 1000000,
