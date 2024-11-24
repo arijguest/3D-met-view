@@ -1,1 +1,172 @@
+import { MeteoriteManager } from './meteorites.js';
+import { CraterManager } from './craters.js';
+import { UIManager } from './ui.js';
+import { CONFIG, COLOR_SCHEMES, FILTER_RANGES } from './constants.js';
+
+class App {
+    constructor() {
+        this.initializeCesium();
+        this.initializeManagers();
+        this.setupEventHandlers();
+        this.loadInitialData();
+    }
+
+    initializeCesium() {
+        Cesium.Ion.defaultAccessToken = CONFIG.CESIUM_TOKEN;
+        this.viewer = new Cesium.Viewer('cesiumContainer', {
+            terrainProvider: Cesium.createWorldTerrain(),
+            baseLayerPicker: true,
+            navigationHelpButton: true,
+            sceneModePicker: true,
+            animation: false,
+            timeline: false,
+            fullscreenButton: true,
+            homeButton: true,
+            geocoder: false,
+            infoBox: false,
+            selectionIndicator: false,
+            navigationInstructionsInitiallyVisible: false
+        });
+
+        // Enable depth testing
+        this.viewer.scene.globe.enableLighting = true;
+        this.viewer.scene.globe.depthTestAgainstTerrain = true;
+    }
+
+    initializeManagers() {
+        this.ui = new UIManager();
+        this.meteorites = new MeteoriteManager(this.viewer);
+        this.craters = new CraterManager(this.viewer);
+        
+        // Initialize filter states
+        this.filterState = {
+            year: { min: FILTER_RANGES.YEAR.MIN, max: FILTER_RANGES.YEAR.MAX },
+            mass: { min: FILTER_RANGES.MASS.MIN, max: FILTER_RANGES.MASS.MAX },
+            diameter: { min: FILTER_RANGES.DIAMETER.MIN, max: FILTER_RANGES.DIAMETER.MAX },
+            age: { min: FILTER_RANGES.AGE.MIN, max: FILTER_RANGES.AGE.MAX },
+            meteoriteClasses: [],
+            targetRocks: [],
+            craterTypes: []
+        };
+    }
+
+    setupEventHandlers() {
+        // Camera movement handler
+        this.viewer.camera.changed.addEventListener(() => {
+            this.handleCameraChange();
+        });
+
+        // Screen space event handler for entity interaction
+        this.screenSpaceHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
+        this.setupEntityInteraction();
+
+        // Filter change handlers
+        document.getElementById('applyFiltersButton').addEventListener('click', () => {
+            this.ui.showLoadingIndicator();
+            requestAnimationFrame(() => {
+                this.applyFilters();
+                this.ui.hideLoadingIndicator();
+            });
+        });
+
+        // Fullscreen handler
+        document.getElementById('fullscreenButton').addEventListener('click', () => {
+            this.toggleFullscreen();
+        });
+    }
+
+    setupEntityInteraction() {
+        // Mouse move for tooltips
+        this.screenSpaceHandler.setInputAction((movement) => {
+            this.handleMouseMove(movement);
+        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+
+        // Double click for entity focus
+        this.screenSpaceHandler.setInputAction((click) => {
+            this.handleEntityClick(click);
+        }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    }
+
+    async loadInitialData() {
+        this.ui.showLoadingIndicator();
+        try {
+            await Promise.all([
+                this.meteorites.fetchData(),
+                this.craters.loadData()
+            ]);
+            this.applyFilters();
+            this.updateDataBars();
+        } catch (error) {
+            console.error('Error loading initial data:', error);
+        } finally {
+            this.ui.hideLoadingIndicator();
+        }
+    }
+
+    handleCameraChange() {
+        const altitude = this.viewer.camera.positionCartographic.height;
+        this.meteorites.updateClustering(altitude);
+    }
+
+    handleMouseMove(movement) {
+        const pickedObject = this.viewer.scene.pick(movement.endPosition);
+        if (Cesium.defined(pickedObject)) {
+            this.ui.updateTooltip(pickedObject, movement.endPosition);
+        } else {
+            this.ui.hideTooltip();
+        }
+    }
+
+    handleEntityClick(click) {
+        const pickedObject = this.viewer.scene.pick(click.position);
+        if (Cesium.defined(pickedObject)) {
+            this.focusOnEntity(pickedObject.id);
+        }
+    }
+
+    applyFilters() {
+        const filteredMeteorites = this.meteorites.filterData(this.filterState);
+        const filteredCraters = this.craters.filterData(this.filterState);
+
+        this.meteorites.updateEntities(filteredMeteorites);
+        this.craters.updateEntities(filteredCraters);
+        this.updateDataBars();
+        this.ui.updateFilterCounts(filteredMeteorites.length, filteredCraters.length);
+    }
+
+    updateDataBars() {
+        this.ui.updateMeteoriteBar(this.meteorites.getTopMeteorites(10));
+        this.ui.updateCraterBar(this.craters.getTopCraters(10));
+    }
+
+    focusOnEntity(entity) {
+        if (!entity) return;
+
+        const position = entity.position.getValue(Cesium.JulianDate.now());
+        this.viewer.camera.flyTo({
+            destination: Cesium.Cartesian3.fromRadians(
+                position.x,
+                position.y,
+                CONFIG.DEFAULT_ZOOM
+            ),
+            duration: 2
+        });
+    }
+
+    toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.getElementById('wrapper').requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    }
+}
+
+// Initialize app when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.app = new App();
+});
+
+// Export for global access if needed
+export default App;
 
