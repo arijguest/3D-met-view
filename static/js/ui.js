@@ -1,3 +1,5 @@
+console.log('UI module loading');
+
 export class UIManager {
     constructor() {
         this.initializeElements();
