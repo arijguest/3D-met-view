@@ -12,24 +12,23 @@ html, body, #wrapper, #cesiumContainer {
 /* Header Component */
 #header {
     position: absolute;
-    top: 50px;
+    top: 20vmin;
     left: 30%;
-    transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.7);
-    padding: 10px;
-    z-index: 10;
+    padding: 5vmin;
+    z-index: 2;
     color: white;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 2vmin;
 }
 
 #header h1 {
     margin: 0;
-    font-size: 20px;
+    font-size: 5.9vw;
 }
 
 #header div {
-    margin-top: 10px;
+    margin-top: 5vmin;
 }
 
 /* Control Panels */
@@ -64,12 +63,12 @@ html, body, #wrapper, #cesiumContainer {
 /* Close Buttons */
 .close-button {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 5vmin;
+    right: 5vmin;
     background: transparent;
     border: none;
     color: white;
-    font-size: 20px;
+    font-size: 5vmin;
     cursor: pointer;
 }
 
