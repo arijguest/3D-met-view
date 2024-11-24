@@ -263,6 +263,30 @@ export class UIManager {
         });
     }
 
+    setupEventHandlers() {
+        // Clustering toggle
+        document.getElementById('clusterMeteorites').addEventListener('change', (e) => {
+            this.meteorites.setClusteringEnabled(e.target.checked);
+        });
+    
+        // Filter updates
+        document.getElementById('applyFiltersButton').addEventListener('click', () => {
+            this.showLoadingIndicator();
+            setTimeout(() => {
+                this.applyFilters();
+                this.hideLoadingIndicator();
+            }, 100);
+        });
+    
+        // Modal handlers
+        document.querySelectorAll('.view-all').forEach(button => {
+            button.addEventListener('click', () => {
+                const modalId = button.dataset.type === 'meteorite' ? 'modal' : 'craterModal';
+                document.getElementById(modalId).style.display = 'block';
+            });
+        });
+    }
+
     setupModalHandlers() {
         ['modal', 'craterModal', 'infoModal'].forEach(modalId => {
             const modal = document.getElementById(modalId);
@@ -373,14 +397,31 @@ export class UIManager {
     }
     
     getTooltipContent(entity) {
-        if (!entity || !entity.id) return null;
+        if (!entity) return null;
         
-        if (entity.id.properties?.isMeteorite) {
-            return this.getMeteoriteTooltip(entity.id.properties.meteorite);
+        if (entity.properties?.isMeteorite) {
+            const meteorite = this.meteorites.filteredMeteorites[entity.properties.meteoriteIndex];
+            return `
+                <b>Name:</b> ${meteorite.name || 'Unknown'}<br>
+                <b>ID:</b> ${meteorite.id || 'Unknown'}<br>
+                <b>Mass:</b> ${this.formatMass(meteorite.mass)}<br>
+                <b>Class:</b> ${meteorite.recclass || 'Unknown'}<br>
+                <b>Year:</b> ${meteorite.year ? new Date(meteorite.year).getFullYear() : 'Unknown'}<br>
+                <b>Fall/Find:</b> ${meteorite.fall || 'Unknown'}
+            `;
         }
         
-        if (entity.id.properties?.isImpactCrater) {
-            return this.getCraterTooltip(entity.id.properties.crater);
+        if (entity.properties?.isImpactCrater) {
+            const crater = this.craters.filteredCraters[entity.properties.craterIndex];
+            const props = crater.properties;
+            return `
+                <b>Name:</b> ${props.Name || 'Unknown'}<br>
+                <b>Age:</b> ${props['Age [Myr]'] || 'Unknown'} Myr<br>
+                <b>Diameter:</b> ${props['Crater diamter [km]'] || 'Unknown'} km<br>
+                <b>Country:</b> ${props.Country || 'Unknown'}<br>
+                <b>Target:</b> ${props.Target || 'Unknown'}<br>
+                <b>Type:</b> ${props['Crater type'] || 'Unknown'}<br>
+            `;
         }
         
         return null;
