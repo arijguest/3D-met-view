@@ -8,7 +8,7 @@ from src.utils import parse_age_string
 # Load environment variables
 load_dotenv()
 
-app = Flask(__name__)
+application = app = Flask(__name__)
 
 # Configuration
 app.config['CESIUM_ION_ACCESS_TOKEN'] = os.getenv('CESIUM_ION_ACCESS_TOKEN')
