@@ -45,16 +45,63 @@ class App {
         this.ui = new UIManager();
         this.meteorites = new MeteoriteManager(this.viewer);
         this.craters = new CraterManager(this.viewer);
+        this.initializeFilters();
+        this.initializeInfoMenu();
+    }
+
+    initializeFilters() {
+        // Initialize year range
+        const yearMin = document.getElementById('yearRangeMin');
+        const yearMax = document.getElementById('yearRangeMax');
+        yearMin.value = FILTER_RANGES.YEAR.MIN;
+        yearMax.value = FILTER_RANGES.YEAR.MAX;
         
-        this.filterState = {
-            year: { min: FILTER_RANGES.YEAR.MIN, max: FILTER_RANGES.YEAR.MAX },
-            mass: { min: FILTER_RANGES.MASS.MIN, max: FILTER_RANGES.MASS.MAX },
-            diameter: { min: FILTER_RANGES.DIAMETER.MIN, max: FILTER_RANGES.DIAMETER.MAX },
-            age: { min: FILTER_RANGES.AGE.MIN, max: FILTER_RANGES.AGE.MAX },
-            meteoriteClasses: [],
-            targetRocks: [],
-            craterTypes: []
+        // Initialize mass range
+        const massMin = document.getElementById('massRangeMin');
+        const massMax = document.getElementById('massRangeMax');
+        massMin.value = FILTER_RANGES.MASS.MIN;
+        massMax.value = FILTER_RANGES.MASS.MAX;
+        
+        // Initialize diameter range
+        const diameterMin = document.getElementById('diameterRangeMin');
+        const diameterMax = document.getElementById('diameterRangeMax');
+        diameterMin.value = FILTER_RANGES.DIAMETER.MIN;
+        diameterMax.value = FILTER_RANGES.DIAMETER.MAX;
+        
+        // Initialize age range
+        const ageMin = document.getElementById('ageRangeMin');
+        const ageMax = document.getElementById('ageRangeMax');
+        ageMin.value = FILTER_RANGES.AGE.MIN;
+        ageMax.value = FILTER_RANGES.AGE.MAX;
+        
+        this.updateFilterDisplays();
+    }
+
+    updateFilterDisplays() {
+        document.getElementById('yearRangeValue').textContent = 
+            `${document.getElementById('yearRangeMin').value} - ${document.getElementById('yearRangeMax').value}`;
+        
+        document.getElementById('massRangeValue').textContent = 
+            `${this.formatMass(document.getElementById('massRangeMin').value)} - ${this.formatMass(document.getElementById('massRangeMax').value)}`;
+        
+        document.getElementById('diameterRangeValue').textContent = 
+            `${document.getElementById('diameterRangeMin').value} - ${document.getElementById('diameterRangeMax').value} km`;
+        
+        document.getElementById('ageRangeValue').textContent = 
+            `${document.getElementById('ageRangeMin').value} - ${document.getElementById('ageRangeMax').value} Myr`;
+    }
+
+    initializeInfoMenu() {
+        const infoButton = document.getElementById('infoButton');
+        const infoModal = document.getElementById('infoModal');
+        const closeInfoModal = document.getElementById('closeInfoModal');
+        
+        infoButton.onclick = () => {
+            this.ui.closeOtherMenus('info');
+            infoModal.style.display = 'block';
         };
+        
+        closeInfoModal.onclick = () => infoModal.style.display = 'none';
     }
 
     setupColorSchemeHandlers() {
