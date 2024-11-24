@@ -36,6 +36,36 @@ export class UIManager {
     
         this.updateFilterDisplay();
     }
+
+    closeOtherMenus(openedMenu) {
+        const menus = {
+            'options': 'controls',
+            'key': 'keyMenu',
+            'info': 'infoModal'
+        };
+        
+        Object.entries(menus).forEach(([key, id]) => {
+            if (key !== openedMenu) {
+                document.getElementById(id).style.display = 'none';
+            }
+        });
+    }
+
+    setupMenuHandlers() {
+        const menuButtons = {
+            'optionsButton': 'controls',
+            'keyButton': 'keyMenu',
+            'infoButton': 'infoModal'
+        };
+
+        Object.entries(menuButtons).forEach(([buttonId, menuId]) => {
+            const button = document.getElementById(buttonId);
+            const closeButton = document.querySelector(`#${menuId} .close-button`);
+            
+            button.onclick = () => this.toggleMenu(menuId);
+            closeButton.onclick = () => document.getElementById(menuId).style.display = 'none';
+        });
+    }
     
     populateColorSchemes() {
         const meteoriteSelect = document.getElementById('meteoriteColorScheme');
