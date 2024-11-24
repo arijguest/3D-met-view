@@ -61,31 +61,48 @@ class App {
 
 
     initializeFilters() {
-        // Initialize year range
-        const yearMin = document.getElementById('yearRangeMin');
-        const yearMax = document.getElementById('yearRangeMax');
-        yearMin.value = FILTER_RANGES.YEAR.MIN;
-        yearMax.value = FILTER_RANGES.YEAR.MAX;
-        
-        // Initialize mass range
-        const massMin = document.getElementById('massRangeMin');
-        const massMax = document.getElementById('massRangeMax');
-        massMin.value = FILTER_RANGES.MASS.MIN;
-        massMax.value = FILTER_RANGES.MASS.MAX;
-        
-        // Initialize diameter range
-        const diameterMin = document.getElementById('diameterRangeMin');
-        const diameterMax = document.getElementById('diameterRangeMax');
-        diameterMin.value = FILTER_RANGES.DIAMETER.MIN;
-        diameterMax.value = FILTER_RANGES.DIAMETER.MAX;
-        
-        // Initialize age range
-        const ageMin = document.getElementById('ageRangeMin');
-        const ageMax = document.getElementById('ageRangeMax');
-        ageMin.value = FILTER_RANGES.AGE.MIN;
-        ageMax.value = FILTER_RANGES.AGE.MAX;
-        
+        // Initialize range sliders with data-driven values
+        const craterDiameters = this.craters.allCraters
+            .map(c => parseFloat(c.properties['Crater diamter [km]']))
+            .filter(d => !isNaN(d));
+        const craterAges = this.craters.allCraters
+            .map(c => parseFloat(c.properties['Age [Myr]']))
+            .filter(a => !isNaN(a));
+    
+        document.getElementById('diameterRangeMin').value = 0;
+        document.getElementById('diameterRangeMax').value = Math.max(...craterDiameters);
+        document.getElementById('ageRangeMin').value = 0;
+        document.getElementById('ageRangeMax').value = Math.max(...craterAges);
+    
+        // Populate multi-select dropdowns
+        this.populateSelectOptions('meteoriteClassSelect', 
+            [...new Set(this.meteorites.allMeteorites.map(m => m.recclass || 'Unknown'))]);
+        this.populateSelectOptions('targetRockSelect',
+            [...new Set(this.craters.allCraters.map(c => c.properties.Target || 'Unknown'))]);
+        this.populateSelectOptions('craterTypeSelect',
+            [...new Set(this.craters.allCraters.map(c => c.properties['Crater type'] || 'Unknown'))]);
+    
         this.updateFilterDisplays();
+    }
+
+    populateSelectOptions(selectId, options) {
+        const select = document.getElementById(selectId);
+        select.innerHTML = options
+            .sort()
+            .map(opt => `<option value="${opt}">${opt}</option>`)
+            .join('');
+    }
+
+    setupFullscreenHandler() {
+        document.getElementById('fullscreenButton').addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.getElementById('wrapper').requestFullscreen();
+                document.getElementById('fullscreenButton').textContent = '🡼 Exit Fullscreen';
+            } else {
+                document.exitFullscreen();
+                document.getElementById('fullscreenButton').textContent = '⛶ Fullscreen';
+            }
+        });
     }
 
     updateFilterDisplays() {
