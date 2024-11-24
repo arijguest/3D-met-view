@@ -28,7 +28,6 @@ class App {
             navigationInstructionsInitiallyVisible: false
         });
 
-        // Enable depth testing
         this.viewer.scene.globe.enableLighting = true;
         this.viewer.scene.globe.depthTestAgainstTerrain = true;
     }
@@ -38,7 +37,6 @@ class App {
         this.meteorites = new MeteoriteManager(this.viewer);
         this.craters = new CraterManager(this.viewer);
         
-        // Initialize filter states
         this.filterState = {
             year: { min: FILTER_RANGES.YEAR.MIN, max: FILTER_RANGES.YEAR.MAX },
             mass: { min: FILTER_RANGES.MASS.MIN, max: FILTER_RANGES.MASS.MAX },
@@ -51,16 +49,13 @@ class App {
     }
 
     setupEventHandlers() {
-        // Camera movement handler
         this.viewer.camera.changed.addEventListener(() => {
             this.handleCameraChange();
         });
 
-        // Screen space event handler for entity interaction
         this.screenSpaceHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
         this.setupEntityInteraction();
 
-        // Filter change handlers
         document.getElementById('applyFiltersButton').addEventListener('click', () => {
             this.ui.showLoadingIndicator();
             requestAnimationFrame(() => {
@@ -69,19 +64,16 @@ class App {
             });
         });
 
-        // Fullscreen handler
         document.getElementById('fullscreenButton').addEventListener('click', () => {
             this.toggleFullscreen();
         });
     }
 
     setupEntityInteraction() {
-        // Mouse move for tooltips
         this.screenSpaceHandler.setInputAction((movement) => {
             this.handleMouseMove(movement);
         }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
 
-        // Double click for entity focus
         this.screenSpaceHandler.setInputAction((click) => {
             this.handleEntityClick(click);
         }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
@@ -169,4 +161,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export for global access if needed
 export default App;
-
