@@ -37,6 +37,25 @@ export class UIManager {
         this.updateFilterDisplay();
     }
 
+    initializeInfoMenu() {
+        const infoModal = document.getElementById('infoModal');
+        const infoButton = document.getElementById('infoButton');
+        const closeInfoModal = document.getElementById('closeInfoModal');
+    
+        infoButton.onclick = () => {
+            this.closeOtherMenus('info');
+            infoModal.style.display = 'block';
+        };
+    
+        closeInfoModal.onclick = () => infoModal.style.display = 'none';
+        
+        window.onclick = (event) => {
+            if (event.target === infoModal) {
+                infoModal.style.display = 'none';
+            }
+        };
+    }
+
     closeOtherMenus(openedMenu) {
         const menus = {
             'options': 'controls',
@@ -324,29 +343,37 @@ export class UIManager {
 
 
     updateDataBars(meteorites, craters) {
-        const meteoriteBar = document.getElementById('meteoriteBar');
-        const craterBar = document.getElementById('craterBar');
-        
         // Update meteorite bar
         const topMeteorites = meteorites
+            .filter(m => m.mass)
             .sort((a, b) => parseFloat(b.mass) - parseFloat(a.mass))
             .slice(0, 10);
-        
+    
+        const meteoriteBar = document.getElementById('meteoriteBar');
         meteoriteBar.innerHTML = `
             <div class="bar-item"><strong>Top Meteorites:</strong></div>
-            <div class="bar-item" onclick="openModal()"><strong>View All</strong></div>
-            ${this.generateMeteoriteBarItems(topMeteorites)}
+            <div class="bar-item" onclick="window.openModal()"><strong>View All</strong></div>
+            ${topMeteorites.map(m => `
+                <div class="bar-item" onclick="window.app.focusOnMeteorite('${m.id}')">
+                    🌠 ${m.name} - ${this.formatMass(m.mass)}
+                </div>
+            `).join('')}
         `;
-        
+    
         // Update crater bar
         const topCraters = craters
             .sort((a, b) => parseFloat(b.properties['Crater diamter [km]']) - parseFloat(a.properties['Crater diamter [km]']))
             .slice(0, 10);
-        
+    
+        const craterBar = document.getElementById('craterBar');
         craterBar.innerHTML = `
             <div class="bar-item"><strong>Top Impact Craters:</strong></div>
-            <div class="bar-item" onclick="openCraterModal()"><strong>View All</strong></div>
-            ${this.generateCraterBarItems(topCraters)}
+            <div class="bar-item" onclick="window.openCraterModal()"><strong>View All</strong></div>
+            ${topCraters.map(c => `
+                <div class="bar-item" onclick="window.app.focusOnCrater('${c.properties.Name}')">
+                    💥 ${c.properties.Name} - ${c.properties['Crater diamter [km]']} km
+                </div>
+            `).join('')}
         `;
     }
 
