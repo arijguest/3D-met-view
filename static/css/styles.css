@@ -12,24 +12,24 @@ html, body, #wrapper, #cesiumContainer {
 /* Header Component */
 #header {
     position: absolute;
-    top: 20vmin;
+    top: 10vmin;
     margin-left: auto;
     margin-right: auto;
     background: rgba(0, 0, 0, 0.7);
-    padding: 5vmin;
+    padding: 3vmin;
     z-index: 2;
     color: white;
     text-align: center;
-    border-radius: 5vmin;
+    border-radius: 3vmin;
 }
 
 #header h1 {
     margin: 0;
-    font-size: 5.9vw;
+    font-size: 4vw;
 }
 
 #header div {
-    margin-top: 5vmin;
+    margin-top: 3vmin;
 }
 
 /* Control Panels */
