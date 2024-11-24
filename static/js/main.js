@@ -35,6 +35,7 @@ class App {
             this.ui.updateLegends();
         });
         
+
     setupFilterHandlers() {
         document.getElementById('applyFiltersButton').addEventListener('click', () => 
             this.applyFilters()
@@ -55,6 +56,8 @@ class App {
         document.getElementById('clusterMeteorites').addEventListener('change', (e) => 
             this.meteorites.setClusteringEnabled(e.target.checked)
         );
+    }
+}
 
     async initializeCesium() {
         const token = window.CESIUM_TOKEN || CONFIG.CESIUM_TOKEN;
