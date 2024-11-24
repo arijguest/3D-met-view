@@ -3,7 +3,7 @@ from typing import List, Dict, Any
 from .utils import parse_age_string
 
 class CraterHandler:
-    def __init__(self, crater_file: str = 'earth-impact-craters-v2.geojson'):
+    def __init__(self, crater_file: str = 'static/data/earth-impact-craters.geojson'):
         self.crater_file = crater_file
         self.all_craters: List[Dict[str, Any]] = []
         self.filtered_craters: List[Dict[str, Any]] = []
