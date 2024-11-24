@@ -37,27 +37,18 @@ class App {
         
 
     setupFilterHandlers() {
-        document.getElementById('applyFiltersButton').addEventListener('click', () => 
-            this.applyFilters()
-        );
+        const applyButton = document.getElementById('applyFiltersButton');
+        const refreshButton = document.getElementById('refreshButton');
+        const toggleMeteorites = document.getElementById('toggleMeteorites');
+        const toggleCraters = document.getElementById('toggleCraters');
+        const clusterMeteorites = document.getElementById('clusterMeteorites');
 
-        document.getElementById('refreshButton').addEventListener('click', () => 
-            this.resetFilters()
-        );
-
-        document.getElementById('toggleMeteorites').addEventListener('change', (e) => 
-            this.meteorites.setVisibility(e.target.checked)
-        );
-
-        document.getElementById('toggleCraters').addEventListener('change', (e) => 
-            this.craters.setVisibility(e.target.checked)
-        );
-
-        document.getElementById('clusterMeteorites').addEventListener('change', (e) => 
-            this.meteorites.setClusteringEnabled(e.target.checked)
-        );
+        applyButton.addEventListener('click', () => this.applyFilters());
+        refreshButton.addEventListener('click', () => this.resetFilters());
+        toggleMeteorites.addEventListener('change', (e) => this.meteorites.setVisibility(e.target.checked));
+        toggleCraters.addEventListener('change', (e) => this.craters.setVisibility(e.target.checked));
+        clusterMeteorites.addEventListener('change', (e) => this.meteorites.setClusteringEnabled(e.target.checked));
     }
-}
 
     async initializeCesium() {
         const token = window.CESIUM_TOKEN || CONFIG.CESIUM_TOKEN;
