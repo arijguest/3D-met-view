@@ -1,5 +1,11 @@
+console.log('Constants loaded:', {
+    CONFIG,
+    COLOR_SCHEMES,
+    FILTER_RANGES
+});
+
 export const CONFIG = {
-    CESIUM_TOKEN: 'your-token-here',
+    CESIUM_TOKEN: 'CESIUM_ION_ACCESS_TOKEN',
     API_URL: 'https://data.nasa.gov/resource/gh4g-9sfh.json',
     API_LIMIT: 50000,
     DEFAULT_ZOOM: 1000000,
