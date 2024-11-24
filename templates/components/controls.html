@@ -1,0 +1,66 @@
+<div id="controls">
+    <header>
+        <h2>Options</h2>
+        <button class="close-button" id="closeOptions">&times;</button>
+    </header>
+    <div style="margin-bottom: 10px;"></div>
+    <div id="searchContainer">
+        <input type="text" id="searchInput" placeholder="Search location...">
+        <button id="searchButton">Search</button>
+    </div>
+    <hr>
+    <h3>Meteorite Filters</h3>
+    <div>
+        <label><input type="checkbox" id="toggleMeteorites" checked> Show Meteorites</label>
+    </div>
+    <div>
+        <label><strong>Year Range:</strong> <span id="yearRangeValue" class="editable-value" data-type="year"></span></label>
+        <input type="range" id="yearRangeMin" min="860" max="2023" value="860">
+        <input type="range" id="yearRangeMax" min="860" max="2023" value="2023">
+    </div>
+    <div>
+        <label><strong>Mass Range:</strong> <span id="massRangeValue" class="editable-value" data-type="mass"></span></label>
+        <input type="range" id="massRangeMin" min="0" max="60000000" value="0">
+        <input type="range" id="massRangeMax" min="0" max="60000000" value="60000000">
+    </div>
+    <div>
+        <label><strong>Meteorite Class:</strong></label>
+        <select id="meteoriteClassSelect" multiple size="3"></select>
+    </div>
+    <div>
+        <label><input type="checkbox" id="clusterMeteorites" checked> Enable Clustering</label>
+    </div>
+    <hr>
+    <h3>Impact Crater Filters</h3>
+    <div>
+        <label><input type="checkbox" id="toggleCraters" checked> Show Impact Craters</label>
+    </div>
+    <div>
+        <label><strong>Diameter Range (km):</strong> <span id="diameterRangeValue" class="editable-value" data-type="diameter"></span></label>
+        <input type="range" id="diameterRangeMin" value="0">
+        <input type="range" id="diameterRangeMax" value="300">
+    </div>
+    <div>
+        <label><strong>Age Range:</strong> <span id="ageRangeValue" class="editable-value" data-type="age"></span></label>
+        <input type="range" id="ageRangeMin" value="0">
+        <input type="range" id="ageRangeMax" value="3000">
+    </div>
+    <div>
+        <label><strong>Target Rock:</strong></label>
+        <select id="targetRockSelect" multiple size="3"></select>
+    </div>
+    <div>
+        <label><strong>Crater Type:</strong></label>
+        <select id="craterTypeSelect" multiple size="3"></select>
+    </div>
+    <hr>
+    <div>
+        <button id="applyFiltersButton">Apply Filters</button>
+        <button id="refreshButton">Reset Filters</button>
+    </div>
+    <hr>
+    <div>
+        <span id="totalMeteorites">Total Meteorites: 0</span><br>
+        <span id="totalCraters">Total Craters: 0</span>
+    </div>
+</div>
