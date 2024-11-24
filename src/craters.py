@@ -10,7 +10,6 @@ class CraterHandler:
         self.load_craters()
 
     def load_craters(self) -> None:
-        """Load crater data from geojson file"""
         try:
             with open(self.crater_file, 'r', encoding='utf-8') as f:
                 data = json.load(f)
@@ -21,7 +20,6 @@ class CraterHandler:
             self.all_craters = []
 
     def _process_crater_ages(self) -> None:
-        """Process age strings for all craters"""
         for crater in self.all_craters:
             age_str = crater['properties'].get('Age [Myr]', '')
             age_min, age_max = parse_age_string(age_str)
@@ -30,7 +28,6 @@ class CraterHandler:
 
     def apply_filters(self, diameter_range=(0, 300), age_range=(0, 3000),
                      target_rocks=None, crater_types=None) -> None:
-        """Filter craters based on criteria"""
         diameter_min, diameter_max = diameter_range
         age_min, age_max = age_range
         
@@ -41,7 +38,6 @@ class CraterHandler:
         ]
 
     def get_crater_description(self, crater: Dict[str, Any]) -> str:
-        """Generate HTML description for crater tooltip"""
         props = crater['properties']
         return f"""
             <b>Name:</b> {props.get('Name', 'Unknown')}<br>
@@ -56,7 +52,6 @@ class CraterHandler:
     def _meets_filter_criteria(crater: Dict[str, Any], diameter_min: float, diameter_max: float,
                              age_min: float, age_max: float, target_rocks: List[str],
                              crater_types: List[str]) -> bool:
-        """Check if crater meets all filter criteria"""
         props = crater['properties']
         
         diameter = float(props.get('Crater diamter [km]', 0))
@@ -76,3 +71,5 @@ class CraterHandler:
 
         return True
 
+    def get_all_craters(self):
+        return {"type": "FeatureCollection", "features": self.all_craters}
