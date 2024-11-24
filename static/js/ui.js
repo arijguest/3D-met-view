@@ -16,34 +16,65 @@ export class UIManager {
         this.updateLegends();
     }
 
-    initializeFilters(meteorites, craters) {
-        // Get actual max values from data
-        const craterDiameters = craters
-            .map(c => parseFloat(c.properties['Crater diamter [km]']))
-            .filter(d => !isNaN(d));
-        const craterAges = craters
-            .map(c => c.properties.age_max)
-            .filter(a => !isNaN(a));
+    initializeFilters() {
+        // Set fixed maximum values for crater sliders
+        const diameterMax = 300; // Fixed max diameter
+        const ageMax = 3000;     // Fixed max age
     
-        const maxDiameter = Math.max(...craterDiameters, 300);  // Use at least 300km
-        const maxAge = Math.max(...craterAges, 3000);  // Use at least 3000 Myr
+        // Initialize diameter range
+        const diameterSliderMin = document.getElementById('diameterRangeMin');
+        const diameterSliderMax = document.getElementById('diameterRangeMax');
+        diameterSliderMin.min = 0;
+        diameterSliderMin.max = diameterMax;
+        diameterSliderMin.value = 0;
+        diameterSliderMax.min = 0;
+        diameterSliderMax.max = diameterMax;
+        diameterSliderMax.value = diameterMax;
     
-        // Set slider ranges
-        const diameterMin = document.getElementById('diameterRangeMin');
-        const diameterMax = document.getElementById('diameterRangeMax');
-        const ageMin = document.getElementById('ageRangeMin');
-        const ageMax = document.getElementById('ageRangeMax');
+        // Initialize age range
+        const ageSliderMin = document.getElementById('ageRangeMin');
+        const ageSliderMax = document.getElementById('ageRangeMax');
+        ageSliderMin.min = 0;
+        ageSliderMin.max = ageMax;
+        ageSliderMin.value = 0;
+        ageSliderMax.min = 0;
+        ageSliderMax.max = ageMax;
+        ageSliderMax.value = ageMax;
     
-        diameterMin.value = 0;
-        diameterMax.value = maxDiameter;
-        ageMin.value = 0;
-        ageMax.value = maxAge;
-    
-        // Update display
         this.updateFilterDisplays();
     }
 
-
+    resetFilters() {
+        this.showLoadingIndicator();
+        
+        setTimeout(() => {
+            // Reset year range
+            document.getElementById('yearRangeMin').value = FILTER_RANGES.YEAR.MIN;
+            document.getElementById('yearRangeMax').value = FILTER_RANGES.YEAR.MAX;
+    
+            // Reset mass range
+            document.getElementById('massRangeMin').value = FILTER_RANGES.MASS.MIN;
+            document.getElementById('massRangeMax').value = FILTER_RANGES.MASS.MAX;
+    
+            // Reset crater ranges
+            document.getElementById('diameterRangeMin').value = 0;
+            document.getElementById('diameterRangeMax').value = 300;
+            document.getElementById('ageRangeMin').value = 0;
+            document.getElementById('ageRangeMax').value = 3000;
+    
+            // Reset all multi-selects
+            ['meteoriteClassSelect', 'targetRockSelect', 'craterTypeSelect'].forEach(selectId => {
+                const select = document.getElementById(selectId);
+                Array.from(select.options).forEach(option => option.selected = false);
+            });
+    
+            // Update displays and apply filters
+            this.updateFilterDisplays();
+            this.applyFilters();
+            this.hideLoadingIndicator();
+        }, 100);
+    }
+    
     initializeInfoMenu() {
         const infoModal = document.getElementById('infoModal');
         const infoButton = document.getElementById('infoButton');
