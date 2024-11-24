@@ -162,3 +162,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export for global access if needed
 export default App;
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.group('Application Initialization');
+    console.log('DOM Content Loaded');
+    console.log('Initializing App...');
+    
+    try {
+        window.app = new App();
+        console.log('App initialized successfully');
+    } catch (error) {
+        console.error('App initialization failed:', error);
+    }
+    
+    console.groupEnd();
+});
