@@ -20,35 +20,80 @@ export class UIManager {
     }
 
     initializeFilters() {
-        // Set fixed ranges for crater sliders
+        // Set fixed ranges for crater sliders with explicit value setting
         const craterSliders = {
             diameter: { min: 0, max: 300, unit: 'km' },
             age: { min: 0, max: 3000, unit: 'Myr' }
         };
-
-        // Initialize crater sliders
+    
         Object.entries(craterSliders).forEach(([type, config]) => {
             const minSlider = document.getElementById(`${type}RangeMin`);
             const maxSlider = document.getElementById(`${type}RangeMax`);
             
             if (minSlider && maxSlider) {
+                // Set range
                 minSlider.min = config.min;
                 minSlider.max = config.max;
-                minSlider.value = config.min;
-                
                 maxSlider.min = config.min;
                 maxSlider.max = config.max;
-                maxSlider.value = config.max;
+                
+                // Set initial values
+                minSlider.value = config.min;
+                maxSlider.value = config.max; // Explicitly set to max value
+                
+                // Force update display
+                this.updateRangeDisplay(type);
             }
         });
-
+    
         // Initialize meteorite sliders
-        document.getElementById('yearRangeMin').value = FILTER_RANGES.YEAR.MIN;
-        document.getElementById('yearRangeMax').value = FILTER_RANGES.YEAR.MAX;
-        document.getElementById('massRangeMin').value = FILTER_RANGES.MASS.MIN;
-        document.getElementById('massRangeMax').value = FILTER_RANGES.MASS.MAX;
-
+        const yearMin = document.getElementById('yearRangeMin');
+        const yearMax = document.getElementById('yearRangeMax');
+        const massMin = document.getElementById('massRangeMin');
+        const massMax = document.getElementById('massRangeMax');
+    
+        yearMin.value = FILTER_RANGES.YEAR.MIN;
+        yearMax.value = FILTER_RANGES.YEAR.MAX;
+        massMin.value = FILTER_RANGES.MASS.MIN;
+        massMax.value = FILTER_RANGES.MASS.MAX;
+    
         this.updateFilterDisplays();
+    }
+    
+    // Add this method to UIManager
+    applyFilters() {
+        const filterState = {
+            meteorites: {
+                year: {
+                    min: parseInt(document.getElementById('yearRangeMin').value),
+                    max: parseInt(document.getElementById('yearRangeMax').value)
+                },
+                mass: {
+                    min: parseFloat(document.getElementById('massRangeMin').value),
+                    max: parseFloat(document.getElementById('massRangeMax').value)
+                },
+                classes: Array.from(document.getElementById('meteoriteClassSelect').selectedOptions)
+                    .map(opt => opt.value)
+            },
+            craters: {
+                diameter: {
+                    min: parseFloat(document.getElementById('diameterRangeMin').value),
+                    max: parseFloat(document.getElementById('diameterRangeMax').value)
+                },
+                age: {
+                    min: parseFloat(document.getElementById('ageRangeMin').value),
+                    max: parseFloat(document.getElementById('ageRangeMax').value)
+                },
+                targetRocks: Array.from(document.getElementById('targetRockSelect').selectedOptions)
+                    .map(opt => opt.value),
+                types: Array.from(document.getElementById('craterTypeSelect').selectedOptions)
+                    .map(opt => opt.value)
+            }
+        };
+    
+        // Emit filter update event
+        const event = new CustomEvent('filtersUpdated', { detail: filterState });
+        window.dispatchEvent(event);
     }
 
     resetFilters() {
