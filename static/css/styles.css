@@ -13,8 +13,7 @@ html, body, #wrapper, #cesiumContainer {
 #header {
     position: absolute;
     top: 10px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
     background: rgba(0, 0, 0, 0.7);
     padding: 3vmin;
     z-index: 2;
@@ -30,8 +29,7 @@ html, body, #wrapper, #cesiumContainer {
 
 #header div {
     margin-top: 10px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
 }
 
 /* Control Panels */
@@ -83,12 +81,13 @@ html, body, #wrapper, #cesiumContainer {
     right: 0;
     background: rgba(0, 0, 0, 1);
     z-index: 2;
-    padding: 5px;
+    padding: 0px;
     display: flex;
     overflow-x: auto;
+    height: calc(2 * (0.3vw + 0.7vh));
 }
 
-#craterBar { bottom: 40px; }
+#craterBar { bottom: calc(2 * (0.3vw + 0.7vh)); }
 #meteoriteBar { bottom: 0; }
 
 /* Bar Items */
