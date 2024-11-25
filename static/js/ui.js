@@ -11,6 +11,15 @@ export class UIManager {
         this.initializeFilters();
         this.setupEventListeners();
         this.searchDebounceTimer = null;
+        if (meteorites?.viewer) {
+            meteorites.viewer.camera.changed.addEventListener(() => {
+                const altitude = meteorites.viewer.camera.positionCartographic.height;
+                const clusterCheckbox = document.getElementById('clusterMeteorites');
+                if (clusterCheckbox && this.meteorites) {
+                    this.meteorites.updateClustering(altitude > 500000 && clusterCheckbox.checked);
+                }
+            });
+        }
     }
 
     initializeColorSchemes() {
@@ -198,6 +207,7 @@ export class UIManager {
         });
     }
 
+    // Update setupMenuHandlers with enhanced error prevention
     setupMenuHandlers() {
         const menuButtons = {
             'optionsButton': 'controls',
@@ -216,7 +226,7 @@ export class UIManager {
                     closeButton.onclick = (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        menu.style.display = 'none';
+                        if (menu) menu.style.display = 'none';
                     };
                 }
             }
@@ -305,6 +315,15 @@ export class UIManager {
         this.setupTableHandlers();
         this.setupSearchHandler();
         this.setupFullscreenHandler();
+
+        // Enhanced clustering toggle
+        const clusterToggle = document.getElementById('clusterMeteorites');
+        if (clusterToggle && this.meteorites?.viewer) {
+            clusterToggle.addEventListener('change', (e) => {
+                const altitude = this.meteorites.viewer.camera.positionCartographic.height;
+                this.meteorites.updateClustering(e.target.checked && altitude > 500000);
+            });
+        }
     
         // Add enhanced filter handlers
         document.getElementById('applyFiltersButton').addEventListener('click', () => {
