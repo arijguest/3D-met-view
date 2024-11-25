@@ -18,11 +18,6 @@ export class MeteoriteManager {
     setVisibility(visible) {
         this.dataSource.show = visible;
     }
-
-    setClusteringEnabled(enabled) {
-        this.clusteringEnabled = enabled;
-        this.updateClustering(this.viewer.camera.positionCartographic.height);
-    }
     
     initializeDataSource() {
         this.viewer.dataSources.add(this.dataSource);
@@ -42,12 +37,17 @@ export class MeteoriteManager {
         });
     }
 
-    // Turn on or off clustering (default on)
-    setClusteringEnabled(enabled) {
-        this.clusteringEnabled = enabled;
-        this.dataSource.clustering.enabled = enabled;
+    updateClustering(enabled) {
+        if (this.dataSource?.clustering) {
+            this.clusteringEnabled = enabled;
+            this.dataSource.clustering.enabled = enabled;
+        }
     }
 
+    setClusteringEnabled(enabled) {
+        const altitude = this.viewer.camera.positionCartographic.height;
+        this.updateClustering(enabled && altitude > 500000);
+    }
 
     async fetchData() {
         try {
