@@ -48,33 +48,42 @@ export class UIManager {
         this.showLoadingIndicator();
         
         setTimeout(() => {
-            // Reset year range
-            document.getElementById('yearRangeMin').value = FILTER_RANGES.YEAR.MIN;
-            document.getElementById('yearRangeMax').value = FILTER_RANGES.YEAR.MAX;
-    
-            // Reset mass range
-            document.getElementById('massRangeMin').value = FILTER_RANGES.MASS.MIN;
-            document.getElementById('massRangeMax').value = FILTER_RANGES.MASS.MAX;
-    
-            // Reset crater ranges
+            // Reset meteorite filters
+            document.getElementById('yearRangeMin').value = 860;
+            document.getElementById('yearRangeMax').value = 2023;
+            document.getElementById('massRangeMin').value = 0;
+            document.getElementById('massRangeMax').value = 60000000;
+            
+            // Reset crater filters
             document.getElementById('diameterRangeMin').value = 0;
             document.getElementById('diameterRangeMax').value = 300;
             document.getElementById('ageRangeMin').value = 0;
             document.getElementById('ageRangeMax').value = 3000;
-    
+            
             // Reset all multi-selects
             ['meteoriteClassSelect', 'targetRockSelect', 'craterTypeSelect'].forEach(selectId => {
                 const select = document.getElementById(selectId);
-                Array.from(select.options).forEach(option => option.selected = false);
+                if (select) {
+                    Array.from(select.options).forEach(option => option.selected = false);
+                }
             });
-    
-            // Update displays and apply filters
-            this.updateFilterDisplays();
+            
+            // Reset visibility and clustering
+            document.getElementById('toggleMeteorites').checked = true;
+            document.getElementById('toggleCraters').checked = true;
+            document.getElementById('clusterMeteorites').checked = true;
+            
+            // Update all range displays
+            ['year', 'mass', 'diameter', 'age'].forEach(type => {
+                this.updateRangeDisplay(type);
+            });
+            
+            // Apply filters and update visualization
             this.applyFilters();
             this.hideLoadingIndicator();
         }, 100);
     }
-    
+
     initializeInfoMenu() {
         const infoModal = document.getElementById('infoModal');
         const infoButton = document.getElementById('infoButton');
@@ -356,13 +365,141 @@ export class UIManager {
         }
     }
 
-    setupFilterHandlers() {
-        const filterInputs = document.querySelectorAll('.filter-input');
-        filterInputs.forEach(input => {
-            input.addEventListener('input', () => {
-                this.debounce(() => this.updateFilterDisplay(input), 100);
+    setupEventHandlers() {
+        // Visibility toggles
+        document.getElementById('toggleMeteorites').addEventListener('change', (e) => {
+            this.meteorites.setVisibility(e.target.checked);
+        });
+    
+        document.getElementById('toggleCraters').addEventListener('change', (e) => {
+            this.craters.setVisibility(e.target.checked);
+        });
+    
+        // Clustering toggle
+        document.getElementById('clusterMeteorites').addEventListener('change', (e) => {
+            this.meteorites.setClusteringEnabled(e.target.checked);
+        });
+    
+        // Filter updates
+        document.getElementById('applyFiltersButton').addEventListener('click', () => {
+            this.showLoadingIndicator();
+            setTimeout(() => {
+                this.applyFilters();
+                this.hideLoadingIndicator();
+            }, 100);
+        });
+    
+        // Reset filters
+        document.getElementById('refreshButton').addEventListener('click', () => {
+            this.showLoadingIndicator();
+            setTimeout(() => {
+                this.resetFilters();
+                this.applyFilters();
+                this.hideLoadingIndicator();
+            }, 100);
+        });
+    
+        // Slider updates
+        ['year', 'mass', 'diameter', 'age'].forEach(type => {
+            const minSlider = document.getElementById(`${type}RangeMin`);
+            const maxSlider = document.getElementById(`${type}RangeMax`);
+            
+            [minSlider, maxSlider].forEach(slider => {
+                slider.addEventListener('input', () => {
+                    this.updateRangeDisplay(type);
+                });
             });
         });
+    
+        // Modal handlers
+        document.querySelectorAll('.view-all').forEach(button => {
+            button.addEventListener('click', () => {
+                const modalId = button.dataset.type === 'meteorite' ? 'modal' : 'craterModal';
+                document.getElementById(modalId).style.display = 'block';
+            });
+        });
+    }
+
+    
+    handleRangeEdit(type) {
+        let newMin, newMax;
+        const currentMin = document.getElementById(`${type}RangeMin`).value;
+        const currentMax = document.getElementById(`${type}RangeMax`).value;
+    
+        switch(type) {
+            case 'diameter':
+                newMin = prompt(`Enter new minimum diameter (km):`, currentMin);
+                newMax = prompt(`Enter new maximum diameter (km):`, currentMax);
+                if (this.validateRange(newMin, newMax, 0, 300)) {
+                    document.getElementById('diameterRangeMin').value = newMin;
+                    document.getElementById('diameterRangeMax').value = newMax;
+                }
+                break;
+            case 'age':
+                newMin = prompt(`Enter new minimum age (Myr):`, currentMin);
+                newMax = prompt(`Enter new maximum age (Myr):`, currentMax);
+                if (this.validateRange(newMin, newMax, 0, 3000)) {
+                    document.getElementById('ageRangeMin').value = newMin;
+                    document.getElementById('ageRangeMax').value = newMax;
+                }
+                break;
+            case 'year':
+                newMin = prompt(`Enter new minimum year:`, currentMin);
+                newMax = prompt(`Enter new maximum year:`, currentMax);
+                if (this.validateRange(newMin, newMax, 860, 2023)) {
+                    document.getElementById('yearRangeMin').value = newMin;
+                    document.getElementById('yearRangeMax').value = newMax;
+                }
+                break;
+            case 'mass':
+                newMin = prompt(`Enter new minimum mass (g):`, currentMin);
+                newMax = prompt(`Enter new maximum mass (g):`, currentMax);
+                if (this.validateRange(newMin, newMax, 0, 60000000)) {
+                    document.getElementById('massRangeMin').value = newMin;
+                    document.getElementById('massRangeMax').value = newMax;
+                }
+                break;
+        }
+        this.updateRangeDisplay(type);
+    }
+    
+    validateRange(min, max, absoluteMin, absoluteMax) {
+        min = parseFloat(min);
+        max = parseFloat(max);
+        
+        if (isNaN(min) || isNaN(max)) {
+            alert('Please enter valid numbers');
+            return false;
+        }
+        
+        if (min < absoluteMin || max > absoluteMax || min > max) {
+            alert(`Please enter values between ${absoluteMin} and ${absoluteMax} where min ≤ max`);
+            return false;
+        }
+        
+        return true;
+    }
+
+
+    updateRangeDisplay(type) {
+        const min = document.getElementById(`${type}RangeMin`).value;
+        const max = document.getElementById(`${type}RangeMax`).value;
+        const display = document.getElementById(`${type}RangeValue`);
+    
+        switch(type) {
+            case 'diameter':
+                display.textContent = `${parseFloat(min).toFixed(2)} - ${parseFloat(max).toFixed(2)} km`;
+                break;
+            case 'age':
+                display.textContent = `${parseFloat(min).toFixed(0)} - ${parseFloat(max).toFixed(0)} Myr`;
+                break;
+            case 'mass':
+                display.textContent = `${this.formatMass(min)} - ${this.formatMass(max)}`;
+                break;
+            case 'year':
+                display.textContent = `${parseInt(min)} - ${parseInt(max)}`;
+                break;
+        }
     }
 
     setupTableHandlers() {
