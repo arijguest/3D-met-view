@@ -308,12 +308,11 @@ export class UIManager {
         this.setupFullscreenHandler();
 
         // Check for clustering on/off
-        document.getElementById('clusterMeteorites').addEventListener('change', (e) => {
-            if (this.meteorites?.viewer) {
-                const altitude = this.meteorites.viewer.camera.positionCartographic.height;
-                this.meteorites.updateClustering(e.target.checked && altitude > 500000);
-            }
-        });
+    document.getElementById('clusterMeteorites').addEventListener('change', (e) => {
+        if (this.meteorites) {
+            this.meteorites.setClusteringEnabled(e.target.checked);
+        }
+    });
     
         // Add enhanced filter handlers
         document.getElementById('applyFiltersButton').addEventListener('click', () => {
