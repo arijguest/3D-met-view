@@ -14,4 +14,4 @@ An interactive 3D visualization of global meteorite specimens and impact craters
 
 ## Quick Start
 
-1. Access via [this link]("impact.arijguest.com").
+1. Access via [this link]("www.impact.arijguest.com").
