@@ -45,6 +45,23 @@ export class UIManager {
                 this.updateRangeDisplay(type);
             }
         });
+
+        requestAnimationFrame(() => {
+            const diameterMax = document.getElementById('diameterRangeMax');
+            const ageMax = document.getElementById('ageRangeMax');
+            
+            if (diameterMax) {
+                diameterMax.value = 300;
+                diameterMax.dispatchEvent(new Event('input'));
+            }
+            
+            if (ageMax) {
+                ageMax.value = 3000;
+                ageMax.dispatchEvent(new Event('input'));
+            }
+            
+            this.updateFilterDisplays();
+        });
     
         // Initialize meteorite sliders
         const yearMin = document.getElementById('yearRangeMin');
@@ -191,12 +208,16 @@ export class UIManager {
         Object.entries(menuButtons).forEach(([buttonId, menuId]) => {
             const button = document.getElementById(buttonId);
             const menu = document.getElementById(menuId);
-            const closeButton = menu?.querySelector('.close-button');
             
             if (button && menu) {
                 button.onclick = () => this.toggleMenu(menuId);
+                const closeButton = menu.querySelector('.close-button');
                 if (closeButton) {
-                    closeButton.onclick = () => menu.style.display = 'none';
+                    closeButton.onclick = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        menu.style.display = 'none';
+                    };
                 }
             }
         });
