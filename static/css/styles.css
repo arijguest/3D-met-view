@@ -64,12 +64,12 @@ html, body, #wrapper, #cesiumContainer {
 /* Close Buttons */
 .close-button {
     position: absolute;
-    top: 5vmin;
-    right: 5vmin;
+    top: 5px;
+    right: 5px;
     background: transparent;
     border: none;
     color: white;
-    font-size: calc(3 * (0.3vw + 0.7vh));
+    font-size: calc(2 * (0.3vw + 0.7vh));
     cursor: pointer;
 }
 
@@ -85,6 +85,12 @@ html, body, #wrapper, #cesiumContainer {
     display: flex;
     overflow-x: auto;
     height: calc(4 * (0.3vw + 0.7vh));
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+
+#meteoriteBar::-webkit-scrollbar, #craterBar::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
 }
 
 #craterBar { bottom: calc(4 * (0.3vw + 0.7vh)); }
