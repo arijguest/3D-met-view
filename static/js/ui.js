@@ -1,13 +1,16 @@
 import { COLOR_SCHEMES, FILTER_RANGES } from './constants.js';
 
 export class UIManager {
-    constructor() {
+    constructor(meteorites, craters) {
         console.log('UI module loading');
+        this.meteorites = meteorites;
+        this.craters = craters;
         this.colorSchemes = COLOR_SCHEMES;
         this.initializeElements();
+        this.initializeColorSchemes();
+        this.initializeFilters();
         this.setupEventListeners();
         this.searchDebounceTimer = null;
-        this.initializeColorSchemes();
     }
 
     initializeColorSchemes() {
@@ -17,30 +20,34 @@ export class UIManager {
     }
 
     initializeFilters() {
-        // Set fixed maximum values for crater sliders
-        const diameterMax = 300; // Fixed max diameter
-        const ageMax = 3000;     // Fixed max age
-    
-        // Initialize diameter range
-        const diameterSliderMin = document.getElementById('diameterRangeMin');
-        const diameterSliderMax = document.getElementById('diameterRangeMax');
-        diameterSliderMin.min = 0;
-        diameterSliderMin.max = diameterMax;
-        diameterSliderMin.value = 0;
-        diameterSliderMax.min = 0;
-        diameterSliderMax.max = diameterMax;
-        diameterSliderMax.value = diameterMax;
-    
-        // Initialize age range
-        const ageSliderMin = document.getElementById('ageRangeMin');
-        const ageSliderMax = document.getElementById('ageRangeMax');
-        ageSliderMin.min = 0;
-        ageSliderMin.max = ageMax;
-        ageSliderMin.value = 0;
-        ageSliderMax.min = 0;
-        ageSliderMax.max = ageMax;
-        ageSliderMax.value = ageMax;
-    
+        // Set fixed ranges for crater sliders
+        const craterSliders = {
+            diameter: { min: 0, max: 300, unit: 'km' },
+            age: { min: 0, max: 3000, unit: 'Myr' }
+        };
+
+        // Initialize crater sliders
+        Object.entries(craterSliders).forEach(([type, config]) => {
+            const minSlider = document.getElementById(`${type}RangeMin`);
+            const maxSlider = document.getElementById(`${type}RangeMax`);
+            
+            if (minSlider && maxSlider) {
+                minSlider.min = config.min;
+                minSlider.max = config.max;
+                minSlider.value = config.min;
+                
+                maxSlider.min = config.min;
+                maxSlider.max = config.max;
+                maxSlider.value = config.max;
+            }
+        });
+
+        // Initialize meteorite sliders
+        document.getElementById('yearRangeMin').value = FILTER_RANGES.YEAR.MIN;
+        document.getElementById('yearRangeMax').value = FILTER_RANGES.YEAR.MAX;
+        document.getElementById('massRangeMin').value = FILTER_RANGES.MASS.MIN;
+        document.getElementById('massRangeMax').value = FILTER_RANGES.MASS.MAX;
+
         this.updateFilterDisplays();
     }
 
@@ -225,12 +232,57 @@ export class UIManager {
     }
 
     setupEventListeners() {
+        // Keep existing handlers
         this.setupMenuHandlers();
         this.setupModalHandlers();
         this.setupFilterHandlers();
         this.setupTableHandlers();
         this.setupSearchHandler();
         this.setupFullscreenHandler();
+    
+        // Add enhanced filter handlers
+        document.getElementById('applyFiltersButton').addEventListener('click', () => {
+            this.showLoadingIndicator();
+            requestAnimationFrame(() => {
+                this.applyFilters();
+                this.hideLoadingIndicator();
+            });
+        });
+    
+        document.getElementById('refreshButton').addEventListener('click', () => {
+            this.showLoadingIndicator();
+            requestAnimationFrame(() => {
+                this.resetFilters();
+                this.initializeFilters();
+                this.applyFilters();
+                this.hideLoadingIndicator();
+            });
+        });
+    
+        // Add visibility toggles
+        document.getElementById('toggleMeteorites').addEventListener('change', (e) => {
+            this.meteorites.setVisibility(e.target.checked);
+        });
+    
+        document.getElementById('toggleCraters').addEventListener('change', (e) => {
+            this.craters.setVisibility(e.target.checked);
+        });
+    
+        // Add clustering toggle
+        document.getElementById('clusterMeteorites').addEventListener('change', (e) => {
+            this.meteorites.setClusteringEnabled(e.target.checked);
+        });
+    
+        // Add color scheme handlers
+        document.getElementById('meteoriteColorScheme').addEventListener('change', () => {
+            this.updateMeteoriteLegend();
+            this.applyFilters();
+        });
+    
+        document.getElementById('craterColorScheme').addEventListener('change', () => {
+            this.updateCraterLegend();
+            this.applyFilters();
+        });
     }
 
     setupMenuHandlers() {
@@ -244,6 +296,31 @@ export class UIManager {
             const button = document.getElementById(buttonId);
             if (button) {
                 button.onclick = () => this.toggleMenu(menuId);
+            }
+        });
+    }
+
+    setupFilterHandlers() {
+        // Make range values editable
+        document.querySelectorAll('.editable-value').forEach(span => {
+            span.style.cursor = 'pointer';
+            span.addEventListener('click', () => {
+                const type = span.getAttribute('data-type');
+                this.handleRangeEdit(type);
+            });
+        });
+
+        // Add slider update handlers
+        ['year', 'mass', 'diameter', 'age'].forEach(type => {
+            const minSlider = document.getElementById(`${type}RangeMin`);
+            const maxSlider = document.getElementById(`${type}RangeMax`);
+            
+            if (minSlider && maxSlider) {
+                [minSlider, maxSlider].forEach(slider => {
+                    slider.addEventListener('input', () => {
+                        this.updateRangeDisplay(type);
+                    });
+                });
             }
         });
     }
