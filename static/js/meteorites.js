@@ -45,8 +45,9 @@ export class MeteoriteManager {
     }
 
     setClusteringEnabled(enabled) {
-        const altitude = this.viewer.camera.positionCartographic.height;
-        this.updateClustering(enabled && altitude > 500000);
+        if (this.dataSource?.clustering) {
+            this.dataSource.clustering.enabled = enabled;
+        }
     }
 
     async fetchData() {
