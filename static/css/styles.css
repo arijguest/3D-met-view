@@ -8,14 +8,12 @@ html, body, #wrapper, #cesiumContainer {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Base Styles - Applied to all devices */
-
 /* Header Component */
 #header {
     position: absolute;
     top: 10px;
-    left: calc(50% - 200px);
-    width: 400px;
+    left: 50%;
+    transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.7);
     padding: 20px;
     z-index: 2;
@@ -37,16 +35,17 @@ html, body, #wrapper, #cesiumContainer {
 #controls, #keyMenu {
     position: absolute;
     top: 100px;
-    left: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.9);
-    padding: 10px;
+    padding: 15px;
     z-index: 1000;
     color: white;
-    border-radius: 5px;
+    border-radius: 10px;
     max-height: calc(100% - 120px);
     overflow-y: auto;
     display: none;
-    width: 300px;
+    width: 80%;
 }
 
 /* Panel Headers */
@@ -60,17 +59,18 @@ html, body, #wrapper, #cesiumContainer {
 #controls h2, #keyMenu h2 {
     margin: 0;
     padding-right: 30px;
+    font-size: 22px;
 }
 
 /* Close Buttons */
 .close-button {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 10px;
+    right: 15px;
     background: transparent;
     border: none;
     color: white;
-    font-size: 18px;
+    font-size: 24px;
     cursor: pointer;
 }
 
@@ -85,27 +85,27 @@ html, body, #wrapper, #cesiumContainer {
     padding: 0;
     display: flex;
     overflow-x: auto;
-    height: 50px;
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    height: 60px;
+    -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
 
 #meteoriteBar::-webkit-scrollbar, #craterBar::-webkit-scrollbar {
-    display: none;  /* Safari and Chrome */
+    display: none;  /* Chrome, Safari, Opera */
 }
 
-#craterBar { bottom: 50px; }
+#craterBar { bottom: 60px; }
 #meteoriteBar { bottom: 0; }
 
 /* Bar Items */
 .bar-item {
     color: white;
     flex: 0 0 auto;
-    padding: 8px 15px;
+    padding: 10px 20px;
     cursor: pointer;
     white-space: nowrap;
     transition: background-color 0.2s ease;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .bar-item:hover {
@@ -117,11 +117,13 @@ html, body, #wrapper, #cesiumContainer {
     position: absolute;
     pointer-events: none;
     z-index: 999;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0,0,0,0.8);
     color: white;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 15px;
+    border-radius: 8px;
     max-width: 300px;
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 #tooltip a {
@@ -139,16 +141,16 @@ html, body, #wrapper, #cesiumContainer {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0,0,0,0.8);
 }
 
 .modal-content {
     background-color: #2b2b2b;
     margin: 5% auto;
-    padding: 20px;
-    width: 60%;
+    padding: 30px;
+    width: 70%;
     color: white;
-    border-radius: 5px;
+    border-radius: 10px;
     position: relative;
     max-height: 80vh;
     overflow-y: auto;
@@ -159,11 +161,12 @@ html, body, #wrapper, #cesiumContainer {
     width: 100%;
     border-collapse: collapse;
     table-layout: auto;
+    font-size: 16px;
 }
 
 .data-table th, .data-table td {
     border: 1px solid #444;
-    padding: 8px;
+    padding: 10px;
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -181,28 +184,29 @@ html, body, #wrapper, #cesiumContainer {
 /* Form Elements */
 input[type="range"] {
     width: 100%;
-    margin: 10px 0;
+    margin: 15px 0;
 }
 
 select {
     width: 100%;
-    padding: 5px;
-    margin: 5px 0;
+    padding: 8px;
+    margin: 8px 0;
     background: #333;
     color: white;
     border: 1px solid #555;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 button {
-    padding: 5px 10px;
-    margin: 5px;
+    padding: 10px 20px;
+    margin: 8px;
     background: #444;
     color: white;
     border: 1px solid #555;
-    border-radius: 3px;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    font-size: 16px;
 }
 
 button:hover {
@@ -225,8 +229,8 @@ button:hover {
 
 .spinner {
     margin: 0 auto 10px auto;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border: 6px solid #ccc;
     border-top-color: #ff1e40;
     border-radius: 50%;
@@ -239,7 +243,7 @@ button:hover {
 
 /* Legend Styles */
 .legend-section {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .legend-list {
@@ -250,49 +254,51 @@ button:hover {
 .legend-list li {
     display: flex;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-size: 16px;
 }
 
 .legend-icon {
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
-    margin-right: 10px;
+    margin-right: 12px;
 }
 
 /* Responsive Design */
-
-/* Mobile Devices */
-@media only screen and (max-width: 600px) {
-    /* Adjust positions and sizes for mobile devices */
-
+@media (max-width: 1024px) {
+    /* Adjust positions and sizes for smaller screens */
     #header {
         top: 5%;
-        left: 5%;
+        left: 50%;
+        transform: translateX(-50%);
         width: 90%;
-        padding: 2vmin;
+        padding: 3vmin;
         border-radius: 2vmin;
     }
 
     #header h1 {
-        font-size: 6vmin;
+        font-size: 5vmin;
     }
 
     #controls, #keyMenu {
         top: 15%;
-        left: 5%;
+        left: 50%;
+        transform: translateX(-50%);
         width: 90%;
-        padding: 5%;
+        padding: 4vmin;
         max-height: 70%;
     }
 
     .close-button {
         font-size: 5vmin;
+        top: 10px;
+        right: 15px;
     }
 
     .bar-item {
-        padding: 5% 10%;
+        padding: 5% 8%;
         font-size: 4vmin;
     }
 
@@ -305,13 +311,13 @@ button:hover {
     }
 
     .modal-content {
-        width: 90%;
+        width: 85%;
         margin: 10% auto;
-        padding: 5%;
+        padding: 4vmin;
     }
 
     .data-table {
-        font-size: 3vmin;
+        font-size: 3.5vmin;
     }
 
     .data-table th, .data-table td {
@@ -328,117 +334,9 @@ button:hover {
     }
 
     .legend-icon {
-        width: 5vmin;
-        height: 5vmin;
+        width: 6vmin;
+        height: 6vmin;
         margin-right: 5%;
-    }
-}
-
-/* Tablet Devices */
-@media only screen and (min-width: 601px) and (max-width: 1024px) {
-    /* Adjust positions and sizes for tablet devices */
-
-    #header {
-        top: 5%;
-        left: 10%;
-        width: 80%;
-        padding: 3vmin;
-        border-radius: 3vmin;
-    }
-
-    #header h1 {
-        font-size: 5vmin;
-    }
-
-    #controls, #keyMenu {
-        top: 100px;
-        left: 10%;
-        width: 80%;
-        padding: 4%;
-        max-height: 70%;
-    }
-
-    .close-button {
-        font-size: 4vmin;
-    }
-
-    .bar-item {
-        padding: 2% 5%;
-        font-size: 3vmin;
-    }
-
-    #meteoriteBar, #craterBar {
-        height: 8vmin;
-    }
-
-    #craterBar {
-        bottom: 8vmin;
-    }
-
-    .modal-content {
-        width: 85%;
-        margin: 5% auto;
-        padding: 3%;
-    }
-
-    .data-table {
-        font-size: 2.5vmin;
-    }
-
-    .data-table th, .data-table td {
-        padding: 2%;
-    }
-
-    button, select, input[type="range"] {
-        font-size: 3vmin;
-    }
-
-    .spinner {
-        width: 15vmin;
-        height: 15vmin;
-    }
-
-    .legend-icon {
-        width: 4vmin;
-        height: 4vmin;
-        margin-right: 4%;
-    }
-}
-
-/* Orientation Adjustments */
-@media only screen and (orientation: landscape) {
-    /* Adjust styles for landscape orientation */
-
-    /* Mobile landscape adjustments */
-    @media (max-width: 600px) {
-        #header {
-            top: 2%;
-            padding: 1.5vmin;
-        }
-
-        .bar-item {
-            font-size: 3.5vmin;
-        }
-
-        .close-button {
-            font-size: 4.5vmin;
-        }
-    }
-
-    /* Tablet landscape adjustments */
-    @media (min-width: 601px) and (max-width: 1024px) {
-        #header {
-            top: 3%;
-            padding: 2.5vmin;
-        }
-
-        .bar-item {
-            font-size: 2.5vmin;
-        }
-
-        .close-button {
-            font-size: 3.5vmin;
-        }
     }
 }
 
