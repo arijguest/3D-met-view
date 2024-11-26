@@ -85,7 +85,7 @@ html, body, #wrapper, #cesiumContainer {
     padding: 0;
     display: flex;
     overflow-x: auto;
-    height: 60px;
+    height: 40px;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
@@ -94,7 +94,7 @@ html, body, #wrapper, #cesiumContainer {
     display: none;  /* Chrome, Safari, Opera */
 }
 
-#craterBar { bottom: 60px; }
+#craterBar { bottom: 40px; }
 #meteoriteBar { bottom: 0; }
 
 /* Bar Items */
@@ -279,7 +279,7 @@ button:hover {
     }
 
     #header h1 {
-        font-size: 5vmin;
+        font-size: 4vmin;
     }
 
     #controls, #keyMenu {
@@ -303,11 +303,11 @@ button:hover {
     }
 
     #meteoriteBar, #craterBar {
-        height: 10vmin;
+        height: 5vmin;
     }
 
     #craterBar {
-        bottom: 10vmin;
+        bottom: 5vmin;
     }
 
     .modal-content {
@@ -329,8 +329,8 @@ button:hover {
     }
 
     .spinner {
-        width: 20vmin;
-        height: 20vmin;
+        width: 10vmin;
+        height: 10vmin;
     }
 
     .legend-icon {
