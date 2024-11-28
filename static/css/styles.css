@@ -303,11 +303,11 @@ button:hover {
     }
 
     #meteoriteBar, #craterBar {
-        height: 3vmin;
+        height: 4vmin;
     }
 
     #craterBar {
-        bottom: 3vmin;
+        bottom: 4vmin;
     }
 
     .modal-content {
