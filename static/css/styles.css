@@ -85,7 +85,7 @@ html, body, #wrapper, #cesiumContainer {
     padding: 0;
     display: flex;
     overflow-x: auto;
-    height: 40px;
+    height: 4vh;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
@@ -94,14 +94,14 @@ html, body, #wrapper, #cesiumContainer {
     display: none;  /* Chrome, Safari, Opera */
 }
 
-#craterBar { bottom: 40px; }
+#craterBar { bottom: 4vh; }
 #meteoriteBar { bottom: 0; }
 
 /* Bar Items */
 .bar-item {
     color: white;
     flex: 0 0 auto;
-    padding: 5px 5px;
+    padding: 1vh 1vh;
     cursor: pointer;
     white-space: nowrap;
     transition: background-color 0.2s ease;
@@ -198,8 +198,8 @@ select {
 }
 
 button {
-    padding: 10px 20px;
-    margin: 8px;
+    padding: 4vh 5vh;
+    margin: 3vh;
     background: #444;
     color: white;
     border: 1px solid #555;
@@ -229,9 +229,9 @@ button:hover {
 
 .spinner {
     margin: 0 auto 10px auto;
-    width: 50px;
-    height: 50px;
-    border: 6px solid #ccc;
+    width: 10vh;
+    height: 10vh;
+    border: 2vh solid #ccc;
     border-top-color: #ff1e40;
     border-radius: 50%;
     animation: spin 0.6s linear infinite;
@@ -268,14 +268,13 @@ button:hover {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    /* Adjust positions and sizes for smaller screens */
     #header {
-        top: 5%;
+        top: 3%;
         left: 50%;
         transform: translateX(-50%);
-        width: 90%;
-        padding: 3vmin;
-        border-radius: 2vmin;
+        width: 95%;
+        padding: 2vmin;
+        border-radius: 1vmin;
     }
 
     #header h1 {
