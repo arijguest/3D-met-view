@@ -101,7 +101,7 @@ html, body, #wrapper, #cesiumContainer {
 .bar-item {
     color: white;
     flex: 0 0 auto;
-    padding: 5px 10px;
+    padding: 5px 5px;
     cursor: pointer;
     white-space: nowrap;
     transition: background-color 0.2s ease;
@@ -298,16 +298,16 @@ button:hover {
     }
 
     .bar-item {
-        padding: 5% 8%;
-        font-size: 4vmin;
+        padding: 5% 5%;
+        font-size: 3vmin;
     }
 
     #meteoriteBar, #craterBar {
-        height: 5vmin;
+        height: 3vmin;
     }
 
     #craterBar {
-        bottom: 5vmin;
+        bottom: 3vmin;
     }
 
     .modal-content {
