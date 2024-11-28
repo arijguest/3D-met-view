@@ -19,7 +19,7 @@ html, body, #wrapper, #cesiumContainer {
     z-index: 2;
     color: white;
     text-align: center;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 #header h1 {
@@ -198,15 +198,15 @@ select {
 }
 
 button {
-    padding: 4vh 5vh;
-    margin: 3vh;
+    padding: 2vh 3vh;
+    margin: 2vh;
     background: #444;
     color: white;
     border: 1px solid #555;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    font-size: 16px;
+    font-size: 3vh;
 }
 
 button:hover {
