@@ -85,10 +85,10 @@ html, body, #wrapper, #cesiumContainer {
     padding: 1px;
     display: flex;
     overflow-x: auto;
-    height: 4vh;
+    height: 7vh;
  }
 
-#craterBar { bottom: 4vh; }
+#craterBar { bottom: 7vh; }
 #meteoriteBar { bottom: 0; }
 
 /* Bar Items */
@@ -200,7 +200,7 @@ button {
     border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    font-size: 2.5vh;
+    font-size: 2vh;
 }
 
 button:hover {
@@ -225,10 +225,10 @@ button:hover {
     margin: 0 auto 10px auto;
     width: 10vh;
     height: 10vh;
-    border: 2vh solid #ccc;
+    border: 1vh solid #ccc;
     border-top-color: #ff1e40;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
+    border-radius: 20%;
+    animation: spin 0.4s linear infinite;
 }
 
 @keyframes spin {
@@ -296,11 +296,11 @@ button:hover {
     }
 
     #meteoriteBar, #craterBar {
-        height: 4vmin;
+        height: 7vmin;
     }
 
     #craterBar {
-        bottom: 4vmin;
+        bottom: 7vmin;
     }
 
     .modal-content {
