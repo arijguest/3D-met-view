@@ -95,7 +95,7 @@ html, body, #wrapper, #cesiumContainer {
 .bar-item {
     color: white;
     flex: 0 0 auto;
-    padding: 0.3vh 0.1vh;
+    padding: 0.1vh 0.1vh;
     cursor: pointer;
     white-space: nowrap;
     transition: background-color 0.2s ease;
@@ -192,15 +192,15 @@ select {
 }
 
 button {
-    padding: 1vh 1.5vh;
-    margin: 1vh;
+    padding: 0.5vh 0.8vh;
+    margin: 0.2vh;
     background: #444;
     color: white;
     border: 1px solid #555;
     border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    font-size: 2vh;
+    font-size: 1.5vh;
 }
 
 button:hover {
@@ -227,8 +227,8 @@ button:hover {
     height: 10vh;
     border: 1vh solid #ccc;
     border-top-color: #ff1e40;
-    border-radius: 20%;
-    animation: spin 0.4s linear infinite;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
 }
 
 @keyframes spin {
