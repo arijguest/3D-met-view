@@ -263,7 +263,7 @@ button:hover {
 /* Responsive Design */
 @media (max-width: 1024px) {
     #header {
-        top: 3%;
+        top: 8%;
         left: 50%;
         transform: translateX(-50%);
         width: 95%;
