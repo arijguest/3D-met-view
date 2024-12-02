@@ -24,11 +24,11 @@ html, body, #wrapper, #cesiumContainer {
 
 #header h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: 5vh;
 }
 
 #header div {
-    margin-top: 10px;
+    margin-top: 25px;
 }
 
 /* Control Panels */
@@ -86,13 +86,7 @@ html, body, #wrapper, #cesiumContainer {
     display: flex;
     overflow-x: auto;
     height: 4vh;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
-#meteoriteBar::-webkit-scrollbar, #craterBar::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari, Opera */
-}
+ }
 
 #craterBar { bottom: 4vh; }
 #meteoriteBar { bottom: 0; }
@@ -101,11 +95,11 @@ html, body, #wrapper, #cesiumContainer {
 .bar-item {
     color: white;
     flex: 0 0 auto;
-    padding: 0.5vh 0.5vh;
+    padding: 0.3vh 0.1vh;
     cursor: pointer;
     white-space: nowrap;
     transition: background-color 0.2s ease;
-    font-size: 18px;
+    font-size: 3.5vh;
 }
 
 .bar-item:hover {
