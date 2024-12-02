@@ -82,7 +82,7 @@ html, body, #wrapper, #cesiumContainer {
     right: 0;
     background: rgba(0, 0, 0, 1);
     z-index: 2;
-    padding: 0;
+    padding: 1px;
     display: flex;
     overflow-x: auto;
     height: 4vh;
@@ -101,7 +101,7 @@ html, body, #wrapper, #cesiumContainer {
 .bar-item {
     color: white;
     flex: 0 0 auto;
-    padding: 1vh 1vh;
+    padding: 0.5vh 0.5vh;
     cursor: pointer;
     white-space: nowrap;
     transition: background-color 0.2s ease;
@@ -198,15 +198,15 @@ select {
 }
 
 button {
-    padding: 2vh 3vh;
-    margin: 2vh;
+    padding: 1vh 1.5vh;
+    margin: 1vh;
     background: #444;
     color: white;
     border: 1px solid #555;
-    border-radius: 5px;
+    border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    font-size: 3vh;
+    font-size: 2.5vh;
 }
 
 button:hover {
