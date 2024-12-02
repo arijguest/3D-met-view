@@ -20,6 +20,7 @@ html, body, #wrapper, #cesiumContainer {
     color: white;
     text-align: center;
     border-radius: 10px;
+    width: 1000px;
 }
 
 #header h1 {
@@ -263,10 +264,10 @@ button:hover {
 /* Responsive Design */
 @media (max-width: 1024px) {
     #header {
-        top: 8%;
+        top: 6%;
         left: 50%;
         transform: translateX(-50%);
-        width: 95%;
+        width: 1000px;
         padding: 2vmin;
         border-radius: 1vmin;
     }
