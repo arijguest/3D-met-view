@@ -314,7 +314,7 @@ export class UIManager {
         }
     });
     
-        // Add enhanced filter handlers
+        // Add apply filter handlers
         document.getElementById('applyFiltersButton').addEventListener('click', () => {
             this.showLoadingIndicator();
             requestAnimationFrame(() => {
@@ -322,7 +322,8 @@ export class UIManager {
                 this.hideLoadingIndicator();
             });
         });
-    
+
+        // Check for refresh button press
         document.getElementById('refreshButton').addEventListener('click', () => {
             this.showLoadingIndicator();
             requestAnimationFrame(() => {
@@ -331,6 +332,19 @@ export class UIManager {
                 this.applyFilters();
                 this.hideLoadingIndicator();
             });
+        });
+
+        // Check for View All button press
+        document.addEventListener('click', (event) => {
+            if (event.target.closest('.view-all')) {
+                const button = event.target.closest('.view-all');
+                const type = button.dataset.type;
+                if (type === 'meteorite') {
+                    this.openModal('meteorite');
+                } else if (type === 'crater') {
+                    this.openModal('crater');
+                }
+            }
         });
     
         // Add visibility toggles
@@ -425,6 +439,128 @@ export class UIManager {
             .sort()
             .map(opt => `<option value="${opt}">${opt}</option>`)
             .join('');
+    }
+
+    // Open data tables (View All) for meteorites & craters
+    openModal(type) {
+        if (type === 'meteorite') {
+            this.updateMeteoriteModalTable();
+            document.getElementById('modal').style.display = 'block';
+        } else if (type === 'crater') {
+            this.updateCraterModalTable();
+            document.getElementById('craterModal').style.display = 'block';
+        }
+    }
+
+    // Populate Meteorite View All Table
+    updateMeteoriteModalTable() {
+        const tbody = document.querySelector('#fullMeteoriteTable tbody');
+        tbody.innerHTML = ''; // Clear existing rows
+    
+        this.meteorites.allMeteorites.forEach((meteorite, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${meteorite.name || 'Unknown'}</td>
+                <td>${this.formatMass(meteorite.mass)}</td>
+                <td>${meteorite.recclass || 'Unknown'}</td>
+                <td>${meteorite.year ? new Date(meteorite.year).getFullYear() : 'Unknown'}</td>
+                <td>${meteorite.fall || 'Unknown'}</
+
+    // Populate Crater View All Table
+    updateCraterModalTable() {
+        const tbody = document.querySelector('#fullCraterTable tbody');
+        const thead = document.querySelector('#fullCraterTable thead');
+        const headerRow = document.getElementById('craterTableHeaders');
+    
+        // Clear existing table body and headers
+        tbody.innerHTML = '';
+        headerRow.innerHTML = '';
+    
+        // Get the search query
+        const searchQuery = document.getElementById('craterSearchInput').value.toLowerCase();
+    
+        // Define the crater property names to display
+        const propertyNames = [
+            'Name',
+            'Crater diamter [km]',
+            'Age [Myr]',
+            'Country',
+            'Target',
+            'Crater type'
+        ];
+    
+        // Create table headers
+        propertyNames.forEach((propName, index) => {
+            const th = document.createElement('th');
+            th.textContent = propName;
+            th.style.cursor = 'pointer';
+            // Add sorting functionality
+            th.addEventListener('click', () => this.sortCraterTable(index));
+            headerRow.appendChild(th);
+        });
+    
+        // Populate table rows
+        this.craters.filteredCraters.forEach((crater, index) => {
+            const properties = crater.properties;
+            const name = properties.Name || 'Unknown';
+    
+            // Filter based on the search query
+            if (name.toLowerCase().includes(searchQuery)) {
+                const tr = document.createElement('tr');
+                tr.setAttribute('data-index', index);
+                tr.style.cursor = 'pointer';
+    
+                // Add click event to focus on crater
+                tr.addEventListener('click', () => {
+                    this.closeModal('craterModal');
+                    const event = new CustomEvent('flyToCrater', { detail: index });
+                    window.dispatchEvent(event);
+                });
+    
+                // Create table cells for each property
+                propertyNames.forEach(propName => {
+                    const td = document.createElement('td');
+                    td.textContent = properties[propName] || 'Unknown';
+                    tr.appendChild(td);
+                });
+    
+                tbody.appendChild(tr);
+            }
+        });
+    }
+
+    // Sort Crater Table
+    sortCraterTable(columnIndex) {
+        const table = document.getElementById('fullCraterTable');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.rows);
+    
+        const dir = table.getAttribute('data-sort-dir') === 'asc' ? 'desc' : 'asc';
+        table.setAttribute('data-sort-dir', dir);
+    
+        rows.sort((a, b) => {
+            let x = a.cells[columnIndex].innerText || a.cells[columnIndex].textContent;
+            let y = b.cells[columnIndex].innerText || b.cells[columnIndex].textContent;
+    
+            // Try to parse as numbers
+            const xNum = parseFloat(x.replace(/[^\d.-]/g, ''));
+            const yNum = parseFloat(y.replace(/[^\d.-]/g, ''));
+    
+            if (!isNaN(xNum) && !isNaN(yNum)) {
+                return dir === 'asc' ? xNum - yNum : yNum - xNum;
+            } else {
+                // Compare as strings
+                x = x.toLowerCase();
+                y = y.toLowerCase();
+                if (x < y) return dir === 'asc' ? -1 : 1;
+                if (x > y) return dir === 'asc' ? 1 : -1;
+                return 0;
+            }
+        });
+    
+        // Re-attach sorted rows
+        tbody.innerHTML = '';
+        rows.forEach(row => tbody.appendChild(row));
     }
 
     updateFilterDisplays() {
@@ -659,6 +795,12 @@ export class UIManager {
             if (searchInput) {
                 searchInput.addEventListener('input', (e) => {
                     this.debounce(() => this.filterTable(e.target.value, searchId), 300);
+                });
+            }
+            const craterSearchInput = document.getElementById('craterSearchInput');
+            if (craterSearchInput) {
+                craterSearchInput.addEventListener('input', () => {
+                    this.updateCraterModalTable();
                 });
             }
         });
