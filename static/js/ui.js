@@ -800,7 +800,7 @@ export class UIManager {
         const meteoriteBar = document.getElementById('meteoriteBar');
         meteoriteBar.innerHTML = `
             <div class="bar-item"><strong>Top Meteorites:</strong></div>
-            <div class="bar-item" onclick="window.openModal()"><strong>View All</strong></div>
+            <div class="bar-item view-all" data-type="meteorite"><strong>View All</strong></div>
             ${topMeteorites.map(m => `
                 <div class="bar-item" onclick="window.app.focusOnMeteorite('${m.id}')">
                     🌠 ${m.name} - ${this.formatMass(m.mass)}
@@ -816,7 +816,7 @@ export class UIManager {
         const craterBar = document.getElementById('craterBar');
         craterBar.innerHTML = `
             <div class="bar-item"><strong>Top Impact Craters:</strong></div>
-            <div class="bar-item" onclick="window.openCraterModal()"><strong>View All</strong></div>
+            <div class="bar-item view-all" data-type="crater"><strong>View All</strong></div>
             ${topCraters.map(c => `
                 <div class="bar-item" onclick="window.app.focusOnCrater('${c.properties.Name}')">
                     💥 ${c.properties.Name} - ${c.properties['Crater diamter [km]']} km
